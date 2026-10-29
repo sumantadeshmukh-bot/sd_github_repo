@@ -3,12 +3,13 @@
 python -m inbound_lead_qualifier demo            start server, post the 10 sample leads, stop, summarise
 python -m inbound_lead_qualifier serve           run the webhook on 127.0.0.1:8765 until Ctrl+C
 python -m inbound_lead_qualifier send [--file samples/leads.json] [--url ...]   post leads to a running server
+python -m inbound_lead_qualifier genkey                  print a new CRM encryption key (Fernet)
+python -m inbound_lead_qualifier export-crm --out FILE   decrypt the CRM to a plaintext CSV (needs the key)
 """
 from __future__ import annotations
 
 import argparse
 import json
-import logging
 import os
 import shutil
 import threading
@@ -17,7 +18,10 @@ import urllib.request
 from collections import Counter
 from pathlib import Path
 
-from .pipeline import LeadPipeline
+from .crmstore import CrmStore, generate_key
+from .jsonlog import setup_logging
+from .llm import usage_records, write_usage_log
+from .pipeline import CRM_COLUMNS, LeadPipeline
 from .server import make_server
 
 DEFAULT_URL = "http://127.0.0.1:8765/webhook/enquiry"
@@ -44,15 +48,23 @@ def post_leads(file: Path, url: str) -> list[dict]:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="Inbound lead qualifier demo")
-    ap.add_argument("cmd", choices=["demo", "serve", "send"])
+    ap.add_argument("cmd", choices=["demo", "serve", "send", "genkey", "export-crm"])
     ap.add_argument("--config", default="config.json")
     ap.add_argument("--file", default="samples/leads.json")
     ap.add_argument("--url", default=DEFAULT_URL)
     ap.add_argument("--port", type=int, default=8765)
+    ap.add_argument("--out", default="crm_export.csv", help="export-crm: where to write the decrypted CSV")
     a = ap.parse_args()
     cfg = json.loads(Path(a.config).read_text())
-    logging.basicConfig(level=cfg.get("log_level", "INFO"), format="%(levelname)s %(name)s: %(message)s")
+    if a.cmd == "genkey":
+        print(generate_key())
+        return
+    setup_logging(cfg)
 
+    if a.cmd == "export-crm":
+        n = CrmStore(Path(cfg["output_dir"]), CRM_COLUMNS, cfg.get("encryption")).export_plaintext(Path(a.out))
+        print(f"Wrote {n} lead(s) to {a.out} (plaintext: handle and delete it as personal data)")
+        return
     if a.cmd == "send":
         post_leads(Path(a.file), a.url)
         return
@@ -72,7 +84,10 @@ def main() -> None:
         srv.shutdown()
     status = Counter(r.get("status") for r in res)
     tiers = Counter(r.get("tier") for r in res if r.get("status") == "QUALIFIED")
-    summary = {"leads": len(res), "status": dict(status), "qualified_by_tier": dict(tiers)}
+    summary = {"leads": len(res), "status": dict(status), "qualified_by_tier": dict(tiers),
+               "crm_storage": "encrypted (Fernet)" if pipe.crm.encrypted else "DEV MODE plaintext (no CRM_ENCRYPTION_KEY)"}
+    if usage_records():
+        write_usage_log(Path(cfg["output_dir"]) / "llm_usage.json")
     Path(cfg["output_dir"], "summary.json").write_text(json.dumps(summary, indent=2))
     print("\n" + json.dumps(summary, indent=2))
 

@@ -1,0 +1,6 @@
+# Python 3.11+
+scikit-learn==1.9.1
+numpy==2.5.3
+pytest==9.2.0
+# Optional (only for `--retriever embedding` with a real sentence model; the default LSA backend needs nothing extra):
+# sentence-transformers==<pin the version you install>

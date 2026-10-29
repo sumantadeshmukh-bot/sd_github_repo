@@ -1,0 +1,55 @@
+# The 8 scoring areas and the reference each one maps to.
+# EVERY reference below is shown in the outputs with the caveat in `verify_note`.
+# The references were supplied by the consultant as a working mapping; they have NOT been checked
+# against the RBI FREE-AI report text. Edit this file (not the code) to correct or extend them.
+verify_note: "to verify against the RBI FREE-AI report text before client use"
+score_labels:            # what each 1-4 level means (used in every output)
+  1: "Not evidenced"
+  2: "Basic / ad hoc"
+  3: "Defined"
+  4: "Managed and tested"
+areas:
+  - id: 1
+    key: accountability
+    name: Accountability
+    covers: "Board-approved AI policy; a named owner for every use case"
+    references: ["RBI FREE-AI rec. 14"]
+  - id: 2
+    key: inventory
+    name: AI inventory
+    covers: "All AI use cases listed and risk-tiered"
+    references: ["RBI FREE-AI rec. 23"]
+  - id: 3
+    key: data_governance
+    name: Data governance
+    covers: "Data use, retention, DPDP Act 2023 alignment"
+    references: ["RBI FREE-AI rec. 15", "DPDP Act 2023"]
+  - id: 4
+    key: lifecycle_evals
+    name: Lifecycle and evals
+    covers: "Validation of models; evals used as a release gate"
+    references: ["RBI FREE-AI rec. 16"]
+  - id: 5
+    key: ai_security
+    name: AI security
+    covers: "Prompt injection, least-privilege agents and tools, data-leak controls"
+    references: ["OWASP GenAI Top 10", "RBI FREE-AI recs. 19-20"]
+  - id: 6
+    key: human_oversight
+    name: Human oversight
+    covers: "Checkpoints matched to risk; explainability; recourse"
+    references: ["RBI FREE-AI principles (Sutras)"]
+  - id: 7
+    key: vendor_risk
+    name: Vendor AI risk
+    covers: "Model changes, data location, contractual limits, exit plan"
+    references: ["OWASP GenAI supply chain risks"]
+  - id: 8
+    key: monitoring_audit
+    name: Monitoring and audit
+    covers: "Drift and performance monitoring, incidents, business continuity, risk-based audit"
+    references: ["RBI FREE-AI recs. 21-24"]
+# Not populated on purpose: RBI draft Model Risk Management guidance (Jun 2026) is part of the
+# Assessment service but its paragraph-level mapping has not been supplied. Add it per area here:
+#   additional_references: {4: ["RBI draft MRM guidance (Jun 2026): <section>"]}
+additional_references: {}

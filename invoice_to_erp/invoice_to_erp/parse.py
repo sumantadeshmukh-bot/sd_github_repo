@@ -38,7 +38,7 @@ HEADER_WORDS = {"Description", "Item", "Sl"}
 def ocr_available() -> bool:
     """True when pytesseract is importable and the tesseract binary is on PATH."""
     try:
-        import pytesseract  # noqa: F401
+        import pytesseract  # noqa: F401  (availability probe only)
     except ImportError:
         return False
     return shutil.which("tesseract") is not None

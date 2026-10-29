@@ -1,0 +1,12 @@
+# SYNTHETIC SAMPLE (organisation details for the CSV register). Fictional company.
+organisation:
+  name: "Hemavati Finance Ltd (Demo)"
+  sector: "NBFC (retail and MSME lending)"
+  size: "About 1,400 staff, 190 branches"
+  as_of: 2026-10-29
+  prepared_by: "Independent AI governance reviewer (demo)"
+org_controls:
+  board_approved_ai_policy: yes
+  governance_committee: partial
+  inventory_review: partial
+  risk_based_audit: partial

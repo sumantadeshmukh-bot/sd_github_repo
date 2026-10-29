@@ -3,27 +3,131 @@
   "reference_time": "2026-10-29T12:00:00+05:30",
   "_reference_time_note": "Fixed 'now' so the demo is reproducible. Set to null in production to use the real clock.",
   "follow_up_window_days": 7,
-  "accepted_notice_versions": ["privacy-notice-v1.0"],
-  "allowed_fields": ["submitted_at", "name", "email", "phone", "company", "website", "role", "company_size",
-                     "budget_inr", "timeline", "use_case", "message", "consent", "marketing_opt_in", "source"],
-  "free_mail_domains": ["gmail.com", "yahoo.com", "yahoo.co.in", "outlook.com", "hotmail.com", "rediffmail.com", "icloud.com", "proton.me"],
+  "accepted_notice_versions": [
+    "privacy-notice-v1.0"
+  ],
+  "allowed_fields": [
+    "submitted_at",
+    "name",
+    "email",
+    "phone",
+    "company",
+    "website",
+    "role",
+    "company_size",
+    "budget_inr",
+    "timeline",
+    "use_case",
+    "message",
+    "consent",
+    "marketing_opt_in",
+    "source"
+  ],
+  "free_mail_domains": [
+    "gmail.com",
+    "yahoo.com",
+    "yahoo.co.in",
+    "outlook.com",
+    "hotmail.com",
+    "rediffmail.com",
+    "icloud.com",
+    "proton.me"
+  ],
   "scorecard": {
-    "weights": {"budget": 25, "timeline": 20, "role": 20, "company_size": 15, "use_case_fit": 20},
-    "budget_bands_inr": [[2500000, 1.0], [1000000, 0.7], [300000, 0.4], [1, 0.1]],
-    "timeline": {"0-3 months": 1.0, "3-6 months": 0.6, "6-12 months": 0.3, "exploring": 0.1},
+    "weights": {
+      "budget": 25,
+      "timeline": 20,
+      "role": 20,
+      "company_size": 15,
+      "use_case_fit": 20
+    },
+    "budget_bands_inr": [
+      [
+        2500000,
+        1.0
+      ],
+      [
+        1000000,
+        0.7
+      ],
+      [
+        300000,
+        0.4
+      ],
+      [
+        1,
+        0.1
+      ]
+    ],
+    "timeline": {
+      "0-3 months": 1.0,
+      "3-6 months": 0.6,
+      "6-12 months": 0.3,
+      "exploring": 0.1
+    },
     "role_keywords": {
-      "1.0": ["founder", "ceo", "cfo", "cto", "coo", "director", "vp", "vice president", "head", "partner", "owner"],
-      "0.6": ["manager", "lead"],
-      "0.3": ["analyst", "executive", "associate", "engineer", "intern"]
+      "1.0": [
+        "founder",
+        "ceo",
+        "cfo",
+        "cto",
+        "coo",
+        "director",
+        "vp",
+        "vice president",
+        "head",
+        "partner",
+        "owner"
+      ],
+      "0.6": [
+        "manager",
+        "lead"
+      ],
+      "0.3": [
+        "analyst",
+        "executive",
+        "associate",
+        "engineer",
+        "intern"
+      ]
     },
-    "company_size": {"1-10": 0.2, "11-50": 0.5, "51-200": 1.0, "201-1000": 1.0, "1000+": 0.7},
+    "company_size": {
+      "1-10": 0.2,
+      "11-50": 0.5,
+      "51-200": 1.0,
+      "201-1000": 1.0,
+      "1000+": 0.7
+    },
     "use_case_keywords": {
-      "1.0": ["invoice", "gst", "document", "extraction", "knowledge assistant", "rag", "q&a", "policy", "lead qualification", "workflow automation"],
-      "0.5": ["chatbot", "analytics", "dashboard", "automation"]
+      "1.0": [
+        "invoice",
+        "gst",
+        "document",
+        "extraction",
+        "knowledge assistant",
+        "rag",
+        "q&a",
+        "policy",
+        "lead qualification",
+        "workflow automation"
+      ],
+      "0.5": [
+        "chatbot",
+        "analytics",
+        "dashboard",
+        "automation"
+      ]
     },
-    "modifiers": {"corporate_email_matching_website": 5, "free_mail": -5}
+    "modifiers": {
+      "corporate_email_matching_website": 5,
+      "free_mail": -5
+    }
   },
-  "routing": {"Hot": 70, "Warm": 45, "Nurture": 0},
+  "routing": {
+    "Hot": 70,
+    "Warm": 45,
+    "Nurture": 0
+  },
   "reply": {
     "consultant_name": "Your AI Consultant (demo)",
     "cta": {
@@ -38,5 +142,33 @@
       "default": "I usually start with a short discovery call to size the problem and agree on a measurable pilot."
     }
   },
-  "log_level": "INFO"
+  "log_level": "INFO",
+  "log_format": "json",
+  "limits": {
+    "rate_per_minute": 30,
+    "max_body_bytes": 16384,
+    "socket_timeout_s": 10,
+    "trust_forwarded_for": false
+  },
+  "encryption": {
+    "key_env": "CRM_ENCRYPTION_KEY",
+    "required": false,
+    "_note": "required=false is DEV MODE (plaintext CRM if no key). Set true in production."
+  },
+  "llm": {
+    "timeout_s": 30,
+    "max_retries": 3,
+    "backoff_base_s": 1.0,
+    "_pricing_note": "Illustrative USD per million tokens - CHECK CURRENT PRICING with the provider before quoting costs.",
+    "pricing": {
+      "gemini-2.5-flash": {
+        "input_per_mtok": 0.3,
+        "output_per_mtok": 2.5
+      },
+      "claude-sonnet-4-5": {
+        "input_per_mtok": 3.0,
+        "output_per_mtok": 15.0
+      }
+    }
+  }
 }

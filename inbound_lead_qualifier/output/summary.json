@@ -10,5 +10,6 @@
     "Hot": 3,
     "Nurture": 1,
     "Warm": 3
-  }
+  },
+  "crm_storage": "encrypted (Fernet)"
 }

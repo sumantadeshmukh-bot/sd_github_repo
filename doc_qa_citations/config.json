@@ -4,9 +4,42 @@
   "min_score": 0.15,
   "min_coverage": 0.5,
   "role_access": {
-    "public": ["public"],
-    "employee": ["public", "internal"],
-    "leadership": ["public", "internal", "confidential"]
+    "public": [
+      "public"
+    ],
+    "employee": [
+      "public",
+      "internal"
+    ],
+    "leadership": [
+      "public",
+      "internal",
+      "confidential"
+    ]
   },
-  "log_level": "INFO"
+  "log_level": "INFO",
+  "retriever": "tfidf",
+  "embedding": {
+    "_note": "Optional dense retriever (--retriever embedding). min_score chosen on the dev set only (midpoint of the gap between lowest answerable score 0.86 and highest refusal score 0.77). The held-out set was not used.",
+    "backend": "auto",
+    "model": "all-MiniLM-L6-v2",
+    "lsa_dims": 64,
+    "min_score": 0.82
+  },
+  "llm": {
+    "timeout_s": 30,
+    "max_retries": 3,
+    "backoff_base_s": 1.0,
+    "_pricing_note": "Illustrative USD per million tokens - CHECK CURRENT PRICING with the provider before quoting costs.",
+    "pricing": {
+      "gemini-2.5-flash": {
+        "input_per_mtok": 0.3,
+        "output_per_mtok": 2.5
+      },
+      "claude-sonnet-4-5": {
+        "input_per_mtok": 3.0,
+        "output_per_mtok": 15.0
+      }
+    }
+  }
 }

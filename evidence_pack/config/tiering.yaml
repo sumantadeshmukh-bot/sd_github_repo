@@ -1,0 +1,48 @@
+# Transparent, configurable risk tiering. Every rule that matches is recorded against the use case,
+# and the HIGHEST matching tier wins. All keys inside `when` must hold (AND).
+#
+# Supported conditions:
+#   decision_impact: automated | advisory
+#   users_include: customers | staff          (the use case affects this group)
+#   personal_data: true | false               (declared, or inferred from data categories)
+#   sensitive_data: true | false
+#   incidents_min: <int>                      (incidents in last 12 months >= n)
+#   human_in_loop: true | false
+#   hosting_outside_india: true | false
+default_tier: Low
+rules:
+  - id: T1
+    tier: High
+    description: "Automated decisions about customers that use personal data"
+    when: {decision_impact: automated, users_include: customers, personal_data: true}
+  - id: T2
+    tier: High
+    description: "Sensitive data used in a use case that affects customers"
+    when: {sensitive_data: true, users_include: customers}
+  - id: T3
+    tier: High
+    description: "Two or more incidents in the last 12 months on a use case that uses personal data"
+    when: {incidents_min: 2, personal_data: true}
+  - id: T4
+    tier: Medium
+    description: "Automated decisions (customers or staff), no personal data"
+    when: {decision_impact: automated}
+  - id: T5
+    tier: Medium
+    description: "Customer-facing use case that uses personal data (advisory)"
+    when: {users_include: customers, personal_data: true}
+  - id: T6
+    tier: Medium
+    description: "Personal or sensitive data hosted outside India"
+    when: {personal_data: true, hosting_outside_india: true}
+  - id: T7
+    tier: Medium
+    description: "Sensitive data used"
+    when: {sensitive_data: true}
+tier_factor: {High: 3, Medium: 2, Low: 1}     # multiplies a gap's severity score
+# Keywords used ONLY when the register does not state personal_data / sensitive_data explicitly.
+personal_keywords: [name, contact, kyc, pan, aadhaar, address, phone, email, customer, transaction, account, income, employee, voice, personal]
+sensitive_keywords: [biometric, health, medical, credit score, credit bureau, caste, religion, financial account, bank statement, aadhaar, voice]
+# Words that mark a model as built in-house (otherwise it is treated as third-party).
+in_house_markers: [in-house, in house, internal, self-hosted, proprietary]
+genai_markers: [llm, gpt, genai, gen ai, generative, chatbot, assistant, copilot, gemini, claude, foundation model, language model]
