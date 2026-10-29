@@ -2,5 +2,26 @@
   "input_dir": "data/invoices",
   "output_dir": "output",
   "review_confidence_threshold": 0.75,
-  "log_level": "INFO"
+  "log_level": "INFO",
+  "ocr": false,
+  "mappings": {
+    "tally": "mappings/tally_purchase.json",
+    "zoho": "mappings/zoho_bills.json"
+  },
+  "llm": {
+    "timeout_s": 30,
+    "max_retries": 3,
+    "backoff_base_s": 1.0,
+    "_pricing_note": "Illustrative USD per million tokens - CHECK CURRENT PRICING with the provider before quoting costs.",
+    "pricing": {
+      "gemini-2.5-flash": {
+        "input_per_mtok": 0.3,
+        "output_per_mtok": 2.5
+      },
+      "claude-sonnet-4-5": {
+        "input_per_mtok": 3.0,
+        "output_per_mtok": 15.0
+      }
+    }
+  }
 }

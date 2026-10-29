@@ -1,6 +1,6 @@
 # Invoice exceptions report
 
-Processed 5 invoices. Exceptions are held back from the ERP import file.
+Processed 6 invoices. Exceptions are held back from the ERP import file.
 
 | File | Invoice No | Status | Reasons |
 |---|---|---|---|

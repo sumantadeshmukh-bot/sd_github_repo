@@ -13,6 +13,19 @@ class LineItem(BaseModel):
     quantity: Decimal
     rate: Decimal
     amount: Decimal
+    # GST rate for this line (e.g. 5, 12, 18). None when the invoice shows a single rate for all lines.
+    tax_rate_pct: Decimal | None = None
+
+
+class TaxLine(BaseModel):
+    """One tax line as printed, e.g. CGST @ 9% = 2,250.00 (rate is the component's own rate)."""
+    kind: str  # CGST | SGST | IGST
+    rate_pct: Decimal
+    amount: Decimal
+
+    @property
+    def effective_gst_pct(self) -> Decimal:
+        return self.rate_pct * 2 if self.kind in ("CGST", "SGST") else self.rate_pct
 
 
 class Invoice(BaseModel):
@@ -29,7 +42,8 @@ class Invoice(BaseModel):
     cgst: Decimal = Decimal("0")
     sgst: Decimal = Decimal("0")
     igst: Decimal = Decimal("0")
-    tax_rate_pct: Decimal | None = None
+    tax_rate_pct: Decimal | None = None  # single GST rate; None when the invoice mixes several rates
+    tax_lines: list[TaxLine] = Field(default_factory=list)
     grand_total: Decimal | None = None
     # field name -> confidence 0..1 (1 = explicit label match, <1 = inferred)
     confidence: dict[str, float] = Field(default_factory=dict)

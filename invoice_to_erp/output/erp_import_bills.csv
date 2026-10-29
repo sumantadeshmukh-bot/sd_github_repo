@@ -3,3 +3,6 @@ Bill Date,Bill Number,Vendor Name,GST Treatment,GSTIN,Source of Supply,Destinati
 14/10/2026,KPT/2026-27/0142,Kaveri Precision Tools Pvt Ltd (Demo),business_gst,29AAKCK1234M1Z7,Karnataka,Karnataka,HSS drill bit set,8207,10,899.00,8990.00,GST18,18,809.10,809.10,0.00,40108.20,OK,N
 16/10/2026,SCS-INV-0098,Sahyadri Cloud Services LLP (Demo),business_gst,27AAQFS5678P1ZX,Maharashtra,Karnataka,Managed cloud hosting Oct 2026,998315,1,48000.00,48000.00,IGST18,18,0.00,0.00,8640.00,71390.00,OK,N
 16/10/2026,SCS-INV-0098,Sahyadri Cloud Services LLP (Demo),business_gst,27AAQFS5678P1ZX,Maharashtra,Karnataka,Backup and DR support,998713,1,12500.00,12500.00,IGST18,18,0.00,0.00,2250.00,71390.00,OK,N
+22/10/2026,HSG/0233,Hoysala Stationers and Gifts (Demo),business_gst,29AAHFH2345K1Z5,Karnataka,Karnataka,Steel office cabinet,9403,2,14500.00,29000.00,GST18,18,2610.00,2610.00,0.00,75240.00,OK,N
+22/10/2026,HSG/0233,Hoysala Stationers and Gifts (Demo),business_gst,29AAHFH2345K1Z5,Karnataka,Karnataka,A4 copier paper 75gsm ream,4802,100,310.00,31000.00,GST12,12,1860.00,1860.00,0.00,75240.00,OK,N
+22/10/2026,HSG/0233,Hoysala Stationers and Gifts (Demo),business_gst,29AAHFH2345K1Z5,Karnataka,Karnataka,Printed notebooks,4820,50,120.00,6000.00,GST5,5,150.00,150.00,0.00,75240.00,OK,N

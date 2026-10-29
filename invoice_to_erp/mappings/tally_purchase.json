@@ -1,0 +1,17 @@
+{
+  "_note": "ASSUMED layout for a Tally Prime purchase-voucher XML import. Check every tag and ledger name against a voucher exported from the client's own Tally company before go-live.",
+  "company_name": "Lotus Leaf Retail Pvt Ltd (Demo)",
+  "voucher_type": "Purchase",
+  "date_format": "%Y%m%d",
+  "ledger_entry_tag": "LEDGERENTRIES.LIST",
+  "party_ledger": "{vendor_name}",
+  "purchase_ledger": "Purchase GST {rate}%",
+  "tax_ledgers": {
+    "CGST": "Input CGST @ {rate}%",
+    "SGST": "Input SGST @ {rate}%",
+    "IGST": "Input IGST @ {rate}%"
+  },
+  "round_off_ledger": "Round Off",
+  "narration": "Imported from {source_file} (status {status}) - verify before posting",
+  "include_gst_fields": true
+}

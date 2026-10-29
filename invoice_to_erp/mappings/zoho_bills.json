@@ -1,0 +1,23 @@
+{
+  "_note": "ASSUMED column names for a Zoho Books bills import. Download the current 'Bills' import template from the client's Zoho Books organisation and edit this list so headers and order match it exactly.",
+  "date_format": "%Y-%m-%d",
+  "columns": [
+    {"column": "Bill Date", "field": "bill_date", "format": "date"},
+    {"column": "Bill Number", "field": "bill_number"},
+    {"column": "Vendor Name", "field": "vendor_name"},
+    {"column": "Currency Code", "const": "INR"},
+    {"column": "GST Treatment", "const": "business_gst"},
+    {"column": "GST Identification Number (GST IN)", "field": "gstin"},
+    {"column": "Source of Supply", "field": "source_of_supply"},
+    {"column": "Destination of Supply", "field": "destination_of_supply"},
+    {"column": "Item Name", "field": "item_name"},
+    {"column": "HSN/SAC", "field": "hsn_sac"},
+    {"column": "Quantity", "field": "quantity"},
+    {"column": "Rate", "field": "rate"},
+    {"column": "Item Tax", "field": "tax_name"},
+    {"column": "Item Tax %", "field": "tax_percentage"},
+    {"column": "Item Total", "field": "item_total"},
+    {"column": "Account", "const": "Cost of Goods Sold"},
+    {"column": "Notes", "field": "review_note"}
+  ]
+}
