@@ -1,0 +1,296 @@
+[
+  {
+    "invoice": {
+      "source_file": "inv01_kaveri.pdf",
+      "invoice_no": "KPT/2026-27/0142",
+      "invoice_date": "2026-10-14",
+      "supplier_name": "Kaveri Precision Tools Pvt Ltd (Demo)",
+      "supplier_gstin": "29AAKCK1234M1Z7",
+      "buyer_name": "Lotus Leaf Retail Pvt Ltd (Demo)",
+      "buyer_gstin": "29AAECL7788H1ZS",
+      "place_of_supply": "29",
+      "line_items": [
+        {
+          "description": "Cordless drill 18V",
+          "hsn_sac": "8467",
+          "quantity": "4",
+          "rate": "6250.00",
+          "amount": "25000.00"
+        },
+        {
+          "description": "HSS drill bit set",
+          "hsn_sac": "8207",
+          "quantity": "10",
+          "rate": "899.00",
+          "amount": "8990.00"
+        }
+      ],
+      "taxable_value": "33990.00",
+      "cgst": "3059.10",
+      "sgst": "3059.10",
+      "igst": "0",
+      "tax_rate_pct": "18",
+      "grand_total": "40108.20",
+      "confidence": {
+        "invoice_no": 1.0,
+        "invoice_date": 1.0,
+        "supplier_gstin": 0.9,
+        "buyer_gstin": 0.9,
+        "supplier_name": 0.8,
+        "buyer_name": 1.0,
+        "place_of_supply": 1.0,
+        "line_items": 1.0,
+        "taxable_value": 1.0,
+        "tax": 1.0,
+        "grand_total": 1.0
+      },
+      "parser": "offline-regex"
+    },
+    "validation": {
+      "invoice_no": "KPT/2026-27/0142",
+      "source_file": "inv01_kaveri.pdf",
+      "errors": [],
+      "warnings": [],
+      "needs_human_review": false,
+      "review_reasons": [],
+      "status": "OK"
+    }
+  },
+  {
+    "invoice": {
+      "source_file": "inv02_sahyadri.pdf",
+      "invoice_no": "SCS-INV-0098",
+      "invoice_date": "2026-10-16",
+      "supplier_name": "Sahyadri Cloud Services LLP (Demo)",
+      "supplier_gstin": "27AAQFS5678P1ZX",
+      "buyer_name": "Lotus Leaf Retail Pvt Ltd (Demo)",
+      "buyer_gstin": "29AAECL7788H1ZS",
+      "place_of_supply": "29",
+      "line_items": [
+        {
+          "description": "Managed cloud hosting Oct 2026",
+          "hsn_sac": "998315",
+          "quantity": "1",
+          "rate": "48000.00",
+          "amount": "48000.00"
+        },
+        {
+          "description": "Backup and DR support",
+          "hsn_sac": "998713",
+          "quantity": "1",
+          "rate": "12500.00",
+          "amount": "12500.00"
+        }
+      ],
+      "taxable_value": "60500.00",
+      "cgst": "0",
+      "sgst": "0",
+      "igst": "10890.00",
+      "tax_rate_pct": "18",
+      "grand_total": "71390.00",
+      "confidence": {
+        "invoice_no": 1.0,
+        "invoice_date": 1.0,
+        "supplier_gstin": 1.0,
+        "buyer_gstin": 1.0,
+        "supplier_name": 1.0,
+        "buyer_name": 1.0,
+        "place_of_supply": 1.0,
+        "line_items": 1.0,
+        "taxable_value": 1.0,
+        "tax": 1.0,
+        "grand_total": 1.0
+      },
+      "parser": "offline-regex"
+    },
+    "validation": {
+      "invoice_no": "SCS-INV-0098",
+      "source_file": "inv02_sahyadri.pdf",
+      "errors": [],
+      "warnings": [],
+      "needs_human_review": false,
+      "review_reasons": [],
+      "status": "OK"
+    }
+  },
+  {
+    "invoice": {
+      "source_file": "inv03_coromandel.pdf",
+      "invoice_no": "CPC-7781",
+      "invoice_date": "2026-10-18",
+      "supplier_name": "Coromandel Packaging Co (Demo)",
+      "supplier_gstin": "33AABFC9012Q1ZD",
+      "buyer_name": "Lotus Leaf Retail Pvt Ltd (Demo)",
+      "buyer_gstin": "29AAECL7788H1ZS",
+      "place_of_supply": "29",
+      "line_items": [
+        {
+          "description": "Corrugated boxes 5-ply",
+          "hsn_sac": "4819",
+          "quantity": "500",
+          "rate": "42.50",
+          "amount": "21250.00"
+        },
+        {
+          "description": "Kraft paper tape roll",
+          "hsn_sac": "4823",
+          "quantity": "120",
+          "rate": "65.00",
+          "amount": "8500.00"
+        }
+      ],
+      "taxable_value": "29750.00",
+      "cgst": "0",
+      "sgst": "0",
+      "igst": "5355.00",
+      "tax_rate_pct": "18",
+      "grand_total": "35000.00",
+      "confidence": {
+        "invoice_no": 0.8,
+        "invoice_date": 0.8,
+        "supplier_gstin": 1.0,
+        "buyer_gstin": 1.0,
+        "supplier_name": 1.0,
+        "buyer_name": 1.0,
+        "place_of_supply": 0.6,
+        "line_items": 1.0,
+        "taxable_value": 1.0,
+        "tax": 1.0,
+        "grand_total": 1.0
+      },
+      "parser": "offline-regex"
+    },
+    "validation": {
+      "invoice_no": "CPC-7781",
+      "source_file": "inv03_coromandel.pdf",
+      "errors": [
+        "Line 2 'Kraft paper tape roll': 120 x 65.00 = 7800.00, invoice shows 8500.00",
+        "Grand total 35000.00 != taxable 29750.00 + tax 5355.00 (35105.00)"
+      ],
+      "warnings": [],
+      "needs_human_review": true,
+      "review_reasons": [
+        "Low confidence on 'place_of_supply' (0.60)"
+      ],
+      "status": "EXCEPTION"
+    }
+  },
+  {
+    "invoice": {
+      "source_file": "inv04_yamuna.pdf",
+      "invoice_no": "YOS/1029",
+      "invoice_date": "2026-10-20",
+      "supplier_name": "Yamuna Office Supplies (Demo)",
+      "supplier_gstin": "07ABCPY3456R1ZZ",
+      "buyer_name": "Lotus Leaf Retail Pvt Ltd (Demo)",
+      "buyer_gstin": "29AAECL7788H1ZS",
+      "place_of_supply": "29",
+      "line_items": [
+        {
+          "description": "A4 copier paper 75gsm ream",
+          "hsn_sac": "4802",
+          "quantity": "60",
+          "rate": "310.00",
+          "amount": "18600.00"
+        },
+        {
+          "description": "Gel pens box of 10",
+          "hsn_sac": "9608",
+          "quantity": "25",
+          "rate": "180.00",
+          "amount": "4500.00"
+        }
+      ],
+      "taxable_value": "23100.00",
+      "cgst": "0",
+      "sgst": "0",
+      "igst": "4158.00",
+      "tax_rate_pct": "18",
+      "grand_total": "27258.00",
+      "confidence": {
+        "invoice_no": 1.0,
+        "invoice_date": 1.0,
+        "supplier_gstin": 0.9,
+        "buyer_gstin": 0.9,
+        "supplier_name": 0.8,
+        "buyer_name": 1.0,
+        "place_of_supply": 1.0,
+        "line_items": 1.0,
+        "taxable_value": 1.0,
+        "tax": 1.0,
+        "grand_total": 1.0
+      },
+      "parser": "offline-regex"
+    },
+    "validation": {
+      "invoice_no": "YOS/1029",
+      "source_file": "inv04_yamuna.pdf",
+      "errors": [
+        "Supplier: GSTIN '07ABCPY3456R1ZZ' fails checksum (expected check char 'S', found 'Z')"
+      ],
+      "warnings": [],
+      "needs_human_review": false,
+      "review_reasons": [],
+      "status": "EXCEPTION"
+    }
+  },
+  {
+    "invoice": {
+      "source_file": "inv05_kaveri_resend.pdf",
+      "invoice_no": "KPT/2026-27/0142",
+      "invoice_date": "2026-10-14",
+      "supplier_name": "Kaveri Precision Tools Pvt Ltd (Demo)",
+      "supplier_gstin": "29AAKCK1234M1Z7",
+      "buyer_name": "Lotus Leaf Retail Pvt Ltd (Demo)",
+      "buyer_gstin": "29AAECL7788H1ZS",
+      "place_of_supply": "29",
+      "line_items": [
+        {
+          "description": "Cordless drill 18V",
+          "hsn_sac": "8467",
+          "quantity": "4",
+          "rate": "6250.00",
+          "amount": "25000.00"
+        },
+        {
+          "description": "HSS drill bit set",
+          "hsn_sac": "8207",
+          "quantity": "10",
+          "rate": "899.00",
+          "amount": "8990.00"
+        }
+      ],
+      "taxable_value": "33990.00",
+      "cgst": "3059.10",
+      "sgst": "3059.10",
+      "igst": "0",
+      "tax_rate_pct": "18",
+      "grand_total": "40108.20",
+      "confidence": {
+        "invoice_no": 1.0,
+        "invoice_date": 1.0,
+        "supplier_gstin": 1.0,
+        "buyer_gstin": 1.0,
+        "supplier_name": 1.0,
+        "buyer_name": 1.0,
+        "place_of_supply": 1.0,
+        "line_items": 1.0,
+        "taxable_value": 1.0,
+        "tax": 1.0,
+        "grand_total": 1.0
+      },
+      "parser": "offline-regex"
+    },
+    "validation": {
+      "invoice_no": "KPT/2026-27/0142",
+      "source_file": "inv05_kaveri_resend.pdf",
+      "errors": [
+        "Duplicate of inv01_kaveri.pdf (same supplier GSTIN + invoice no + FY 2026-27)"
+      ],
+      "warnings": [],
+      "needs_human_review": false,
+      "review_reasons": [],
+      "status": "EXCEPTION"
+    }
+  }
+]

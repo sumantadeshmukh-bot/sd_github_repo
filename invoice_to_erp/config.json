@@ -1,0 +1,6 @@
+{
+  "input_dir": "data/invoices",
+  "output_dir": "output",
+  "review_confidence_threshold": 0.75,
+  "log_level": "INFO"
+}

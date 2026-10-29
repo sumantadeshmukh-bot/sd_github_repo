@@ -1,0 +1,175 @@
+{
+  "cases": 12,
+  "answerable": 10,
+  "hit_rate_at_1": 1.0,
+  "hit_rate_at_3": 1.0,
+  "citation_accuracy": 1.0,
+  "refusal_correctness": 1.0,
+  "passed": 12,
+  "rows": [
+    {
+      "q": "How many days of earned leave do I get per year?",
+      "role": "employee",
+      "expect": "HR-LEAVE-01#earned-leave-0",
+      "top": [
+        "HR-LEAVE-01#earned-leave-0"
+      ],
+      "found": true,
+      "cited": [
+        "HR-LEAVE-01#earned-leave-0"
+      ],
+      "score": 0.478,
+      "pass": true
+    },
+    {
+      "q": "When is a medical certificate needed for sick leave?",
+      "role": "employee",
+      "expect": "HR-LEAVE-01#sick-leave-0",
+      "top": [
+        "HR-LEAVE-01#sick-leave-0"
+      ],
+      "found": true,
+      "cited": [
+        "HR-LEAVE-01#sick-leave-0"
+      ],
+      "score": 0.529,
+      "pass": true
+    },
+    {
+      "q": "What is the hotel limit per night in metro cities?",
+      "role": "employee",
+      "expect": "FIN-TRAVEL-02#hotel-limits-0",
+      "top": [
+        "FIN-TRAVEL-02#hotel-limits-0"
+      ],
+      "found": true,
+      "cited": [
+        "FIN-TRAVEL-02#hotel-limits-0"
+      ],
+      "score": 0.526,
+      "pass": true
+    },
+    {
+      "q": "What is the deadline for submitting expense claims after travel?",
+      "role": "employee",
+      "expect": "FIN-TRAVEL-02#expense-claims-0",
+      "top": [
+        "FIN-TRAVEL-02#expense-claims-0"
+      ],
+      "found": true,
+      "cited": [
+        "FIN-TRAVEL-02#expense-claims-0"
+      ],
+      "score": 0.623,
+      "pass": true
+    },
+    {
+      "q": "Is multi-factor authentication mandatory for VPN?",
+      "role": "employee",
+      "expect": "IT-SEC-03#passwords-and-multi-factor-authentication-0",
+      "top": [
+        "IT-SEC-03#passwords-and-multi-factor-authentication-0"
+      ],
+      "found": true,
+      "cited": [
+        "IT-SEC-03#passwords-and-multi-factor-authentication-0"
+      ],
+      "score": 0.601,
+      "pass": true
+    },
+    {
+      "q": "Can I paste customer personal data into public AI tools?",
+      "role": "employee",
+      "expect": "IT-SEC-03#use-of-ai-tools-0",
+      "top": [
+        "IT-SEC-03#use-of-ai-tools-0"
+      ],
+      "found": true,
+      "cited": [
+        "IT-SEC-03#use-of-ai-tools-0"
+      ],
+      "score": 0.602,
+      "pass": true
+    },
+    {
+      "q": "How do I withdraw my consent for marketing?",
+      "role": "public",
+      "expect": "LEGAL-PRIV-04#your-consent-and-withdrawal-0",
+      "top": [
+        "LEGAL-PRIV-04#your-consent-and-withdrawal-0"
+      ],
+      "found": true,
+      "cited": [
+        "LEGAL-PRIV-04#your-consent-and-withdrawal-0"
+      ],
+      "score": 0.444,
+      "pass": true
+    },
+    {
+      "q": "How many quotations are required for a purchase?",
+      "role": "employee",
+      "expect": "FIN-PROC-05#quotations-0",
+      "top": [
+        "FIN-PROC-05#quotations-0"
+      ],
+      "found": true,
+      "cited": [
+        "FIN-PROC-05#quotations-0"
+      ],
+      "score": 0.418,
+      "pass": true
+    },
+    {
+      "q": "How long does a refund take to reach my original payment method?",
+      "role": "public",
+      "expect": "CS-REFUND-06#how-refunds-are-paid-0",
+      "top": [
+        "CS-REFUND-06#how-refunds-are-paid-0"
+      ],
+      "found": true,
+      "cited": [
+        "CS-REFUND-06#how-refunds-are-paid-0"
+      ],
+      "score": 0.329,
+      "pass": true
+    },
+    {
+      "q": "Within how many hours must cyber incidents be reported to CERT-In?",
+      "role": "leadership",
+      "expect": "IT-SEC-03#incident-escalation-and-regulator-reporting-0",
+      "top": [
+        "IT-SEC-03#incident-escalation-and-regulator-reporting-0"
+      ],
+      "found": true,
+      "cited": [
+        "IT-SEC-03#incident-escalation-and-regulator-reporting-0"
+      ],
+      "score": 0.357,
+      "pass": true
+    },
+    {
+      "q": "Within how many hours must cyber incidents be reported to CERT-In?",
+      "role": "employee",
+      "expect": null,
+      "top": [
+        "IT-SEC-03#reporting-a-security-incident-0"
+      ],
+      "found": false,
+      "cited": [],
+      "score": 0.204,
+      "pass": true
+    },
+    {
+      "q": "What is the share price target for next quarter?",
+      "role": "leadership",
+      "expect": null,
+      "top": [
+        "IT-SEC-03#privileged-access-reviews-0"
+      ],
+      "found": false,
+      "cited": [],
+      "score": 0.106,
+      "pass": true
+    }
+  ]
+}

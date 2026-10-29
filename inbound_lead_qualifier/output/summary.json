@@ -1,0 +1,14 @@
+{
+  "leads": 10,
+  "status": {
+    "QUALIFIED": 7,
+    "PARKED_NO_CONSENT": 1,
+    "WINDOW_EXPIRED": 1,
+    "REJECTED_INVALID": 1
+  },
+  "qualified_by_tier": {
+    "Hot": 3,
+    "Nurture": 1,
+    "Warm": 3
+  }
+}

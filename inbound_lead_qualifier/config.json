@@ -1,0 +1,42 @@
+{
+  "output_dir": "output",
+  "reference_time": "2026-10-29T12:00:00+05:30",
+  "_reference_time_note": "Fixed 'now' so the demo is reproducible. Set to null in production to use the real clock.",
+  "follow_up_window_days": 7,
+  "accepted_notice_versions": ["privacy-notice-v1.0"],
+  "allowed_fields": ["submitted_at", "name", "email", "phone", "company", "website", "role", "company_size",
+                     "budget_inr", "timeline", "use_case", "message", "consent", "marketing_opt_in", "source"],
+  "free_mail_domains": ["gmail.com", "yahoo.com", "yahoo.co.in", "outlook.com", "hotmail.com", "rediffmail.com", "icloud.com", "proton.me"],
+  "scorecard": {
+    "weights": {"budget": 25, "timeline": 20, "role": 20, "company_size": 15, "use_case_fit": 20},
+    "budget_bands_inr": [[2500000, 1.0], [1000000, 0.7], [300000, 0.4], [1, 0.1]],
+    "timeline": {"0-3 months": 1.0, "3-6 months": 0.6, "6-12 months": 0.3, "exploring": 0.1},
+    "role_keywords": {
+      "1.0": ["founder", "ceo", "cfo", "cto", "coo", "director", "vp", "vice president", "head", "partner", "owner"],
+      "0.6": ["manager", "lead"],
+      "0.3": ["analyst", "executive", "associate", "engineer", "intern"]
+    },
+    "company_size": {"1-10": 0.2, "11-50": 0.5, "51-200": 1.0, "201-1000": 1.0, "1000+": 0.7},
+    "use_case_keywords": {
+      "1.0": ["invoice", "gst", "document", "extraction", "knowledge assistant", "rag", "q&a", "policy", "lead qualification", "workflow automation"],
+      "0.5": ["chatbot", "analytics", "dashboard", "automation"]
+    },
+    "modifiers": {"corporate_email_matching_website": 5, "free_mail": -5}
+  },
+  "routing": {"Hot": 70, "Warm": 45, "Nurture": 0},
+  "reply": {
+    "consultant_name": "Your AI Consultant (demo)",
+    "cta": {
+      "Hot": "Could we book a 30-minute discovery call this week? Reply with two slots that suit you (IST).",
+      "Warm": "I can share a short case note and a 2-week pilot outline. Would that help?",
+      "Nurture": "I'll send one short guide on getting started; reply anytime when the timing is right."
+    },
+    "use_case_lines": {
+      "invoice": "For GST invoice processing, a typical first step is a 2-week pilot on a sample of 200 bills with checksum, tax and duplicate checks before anything reaches the ERP.",
+      "document": "For policy and document Q&A, I usually start with a cited-answer assistant over 5-10 documents, with role-based access and an evaluation set.",
+      "lead": "For lead qualification, a transparent scorecard and consent-aware follow-up are usually the quickest wins.",
+      "default": "I usually start with a short discovery call to size the problem and agree on a measurable pilot."
+    }
+  },
+  "log_level": "INFO"
+}

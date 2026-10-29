@@ -1,0 +1,14 @@
+[
+  {"q": "How many days of earned leave do I get per year?", "role": "employee", "expect": "HR-LEAVE-01#earned-leave-0"},
+  {"q": "When is a medical certificate needed for sick leave?", "role": "employee", "expect": "HR-LEAVE-01#sick-leave-0"},
+  {"q": "What is the hotel limit per night in metro cities?", "role": "employee", "expect": "FIN-TRAVEL-02#hotel-limits-0"},
+  {"q": "What is the deadline for submitting expense claims after travel?", "role": "employee", "expect": "FIN-TRAVEL-02#expense-claims-0"},
+  {"q": "Is multi-factor authentication mandatory for VPN?", "role": "employee", "expect": "IT-SEC-03#passwords-and-multi-factor-authentication-0"},
+  {"q": "Can I paste customer personal data into public AI tools?", "role": "employee", "expect": "IT-SEC-03#use-of-ai-tools-0"},
+  {"q": "How do I withdraw my consent for marketing?", "role": "public", "expect": "LEGAL-PRIV-04#your-consent-and-withdrawal-0"},
+  {"q": "How many quotations are required for a purchase?", "role": "employee", "expect": "FIN-PROC-05#quotations-0"},
+  {"q": "How long does a refund take to reach my original payment method?", "role": "public", "expect": "CS-REFUND-06#how-refunds-are-paid-0"},
+  {"q": "Within how many hours must cyber incidents be reported to CERT-In?", "role": "leadership", "expect": "IT-SEC-03#incident-escalation-and-regulator-reporting-0"},
+  {"q": "Within how many hours must cyber incidents be reported to CERT-In?", "role": "employee", "expect": null, "note": "confidential section: employee must be refused"},
+  {"q": "What is the share price target for next quarter?", "role": "leadership", "expect": null, "note": "out of scope: not in any document"}
+]

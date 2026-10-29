@@ -1,0 +1,17 @@
+DRAFT - NOT SENT - requires human review before sending
+To: vikram@konkancold.example
+Subject: Re: your enquiry about Document Q&A assistant over our SOPs
+
+Dear Vikram,
+
+Thank you for your enquiry on behalf of Konkan Cold Chain (Demo). You mentioned: "Document Q&A assistant over our SOPs".
+
+For policy and document Q&A, I usually start with a cited-answer assistant over 5-10 documents, with role-based access and an evaluation set.
+
+Could we book a 30-minute discovery call this week? Reply with two slots that suit you (IST).
+
+You are receiving this one-to-one reply because you asked us to contact you about this enquiry.
+You can withdraw consent at any time by replying "withdraw" and we will delete your enquiry data.
+
+Regards,
+Your AI Consultant (demo)

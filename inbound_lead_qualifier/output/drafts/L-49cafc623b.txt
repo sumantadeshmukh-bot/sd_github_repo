@@ -1,0 +1,17 @@
+DRAFT - NOT SENT - requires human review before sending
+To: karan@tulunadu-startup.example
+Subject: Re: your enquiry about Lead qualification for our sales team
+
+Dear Karan,
+
+Thank you for your enquiry on behalf of Tulunadu Labs (Demo). You mentioned: "Lead qualification for our sales team".
+
+For lead qualification, a transparent scorecard and consent-aware follow-up are usually the quickest wins.
+
+I can share a short case note and a 2-week pilot outline. Would that help?
+
+You are receiving this one-to-one reply because you asked us to contact you about this enquiry.
+You can withdraw consent at any time by replying "withdraw" and we will delete your enquiry data.
+
+Regards,
+Your AI Consultant (demo)

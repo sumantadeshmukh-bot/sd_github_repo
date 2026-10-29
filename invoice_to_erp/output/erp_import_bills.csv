@@ -1,0 +1,5 @@
+Bill Date,Bill Number,Vendor Name,GST Treatment,GSTIN,Source of Supply,Destination of Supply,Item Name,HSN/SAC,Quantity,Rate,Item Total,Tax Name,Tax Percentage,CGST,SGST,IGST,Bill Total,Status,Review Flag
+14/10/2026,KPT/2026-27/0142,Kaveri Precision Tools Pvt Ltd (Demo),business_gst,29AAKCK1234M1Z7,Karnataka,Karnataka,Cordless drill 18V,8467,4,6250.00,25000.00,GST18,18,2250.00,2250.00,0.00,40108.20,OK,N
+14/10/2026,KPT/2026-27/0142,Kaveri Precision Tools Pvt Ltd (Demo),business_gst,29AAKCK1234M1Z7,Karnataka,Karnataka,HSS drill bit set,8207,10,899.00,8990.00,GST18,18,809.10,809.10,0.00,40108.20,OK,N
+16/10/2026,SCS-INV-0098,Sahyadri Cloud Services LLP (Demo),business_gst,27AAQFS5678P1ZX,Maharashtra,Karnataka,Managed cloud hosting Oct 2026,998315,1,48000.00,48000.00,IGST18,18,0.00,0.00,8640.00,71390.00,OK,N
+16/10/2026,SCS-INV-0098,Sahyadri Cloud Services LLP (Demo),business_gst,27AAQFS5678P1ZX,Maharashtra,Karnataka,Backup and DR support,998713,1,12500.00,12500.00,IGST18,18,0.00,0.00,2250.00,71390.00,OK,N

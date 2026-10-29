@@ -1,0 +1,17 @@
+DRAFT - NOT SENT - requires human review before sending
+To: ananya.rao@deccanspice.example
+Subject: Re: your enquiry about GST invoice extraction into our ERP
+
+Dear Ananya,
+
+Thank you for your enquiry on behalf of Deccan Spice Exports (Demo). You mentioned: "GST invoice extraction into our ERP".
+
+For GST invoice processing, a typical first step is a 2-week pilot on a sample of 200 bills with checksum, tax and duplicate checks before anything reaches the ERP.
+
+Could we book a 30-minute discovery call this week? Reply with two slots that suit you (IST).
+
+You are receiving this one-to-one reply because you asked us to contact you about this enquiry.
+You can withdraw consent at any time by replying "withdraw" and we will delete your enquiry data.
+
+Regards,
+Your AI Consultant (demo)

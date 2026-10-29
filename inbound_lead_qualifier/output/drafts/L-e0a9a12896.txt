@@ -1,0 +1,17 @@
+DRAFT - NOT SENT - requires human review before sending
+To: arjun.das@hooghlylogistics.example
+Subject: Re: your enquiry about Workflow automation for shipment documents
+
+Dear Arjun,
+
+Thank you for your enquiry on behalf of Hooghly Logistics (Demo). You mentioned: "Workflow automation for shipment documents".
+
+For policy and document Q&A, I usually start with a cited-answer assistant over 5-10 documents, with role-based access and an evaluation set.
+
+I can share a short case note and a 2-week pilot outline. Would that help?
+
+You are receiving this one-to-one reply because you asked us to contact you about this enquiry.
+You can withdraw consent at any time by replying "withdraw" and we will delete your enquiry data.
+
+Regards,
+Your AI Consultant (demo)
