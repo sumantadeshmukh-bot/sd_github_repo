@@ -64,6 +64,11 @@ def test_genai_and_third_party_detection(cfg):
     assert not u2.uses_genai and not u2.third_party
 
 
+def test_blank_vendor_is_not_treated_as_in_house(cfg):
+    u = enrich(uc(model_vendor=""), cfg.tiering)
+    assert u.third_party is True and any("vendor-risk checks are applied" in a for a in u.assumptions)
+
+
 def test_hosting_location_parsing():
     assert outside_india(uc(hosting_location="")) is None
     assert outside_india(uc(hosting_location="India (own DC)")) is False

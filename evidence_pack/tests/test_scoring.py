@@ -139,3 +139,19 @@ def test_plan_phases_follow_severity(cfg, packs):
 def test_assumptions_mention_blank_is_not_no_and_verify_note(cfg, packs):
     text = " ".join(packs["fintech"].scored.assumptions)
     assert "not evidenced" in text and "to verify against the RBI FREE-AI report text before client use" in text
+
+
+def test_org_gap_uses_worst_answer_whatever_the_register_order(cfg):
+    yes_first = score_register(make_reg(make_uc(id="A", controls={"board_approved_ai_policy": "yes"}),
+                                        make_uc(id="B", controls={"board_approved_ai_policy": "no"})), cfg)
+    no_first = score_register(make_reg(make_uc(id="B", controls={"board_approved_ai_policy": "no"}),
+                                       make_uc(id="A", controls={"board_approved_ai_policy": "yes"})), cfg)
+    for sc in (yes_first, no_first):
+        gap = [g for g in sc.gaps if g.check_id == "ACC-2"]
+        assert len(gap) == 1 and gap[0].result == "fail" and "answered this way for: B" in gap[0].detail
+
+
+def test_blank_vendor_keeps_vendor_gaps_visible(cfg):
+    sc = score_register(make_reg(make_uc(model_vendor="")), cfg)
+    res = {r.check_id: r.result for a in sc.scores["UC-1"].values() for r in a.results}
+    assert res["VEN-1"] == "fail" and res["VEN-3"] == "unknown" and any(g.check_id == "VEN-3" for g in sc.gaps)

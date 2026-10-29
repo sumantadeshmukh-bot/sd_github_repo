@@ -27,8 +27,8 @@ def multi_rate_invoice(**kw) -> Invoice:
     base = dict(
         source_file="m.pdf", invoice_no="M1", invoice_date=date(2026, 10, 1), supplier_name="S (Demo)",
         supplier_gstin=make_gstin("29", "AAKCK1234M"), buyer_gstin=make_gstin("29", "AAECL7788H"),
-        place_of_supply="29", taxable_value=Decimal("1000"), cgst=Decimal("85"), sgst=Decimal("85"),
-        grand_total=Decimal("1170"), confidence={"invoice_no": 1.0},
+        place_of_supply="29", taxable_value=Decimal("1000"), cgst=Decimal("57.5"), sgst=Decimal("57.5"),
+        grand_total=Decimal("1115"), confidence={"invoice_no": 1.0},
         line_items=[LineItem(description="a", hsn_sac="1111", quantity=1, rate=500, amount=500, tax_rate_pct=18),
                     LineItem(description="b", hsn_sac="2222", quantity=1, rate=500, amount=500, tax_rate_pct=5)],
         tax_lines=[TaxLine(kind="CGST", rate_pct=9, amount=45), TaxLine(kind="SGST", rate_pct=9, amount=45),
@@ -70,6 +70,13 @@ def test_wrong_tax_in_one_slab_is_caught():
     assert any("GST 5% slab" in e for e in errs)
 
 
+def test_tax_lines_must_add_up_to_invoice_tax_totals():
+    inv = multi_rate_invoice(cgst=Decimal("85"), sgst=Decimal("85"), grand_total=Decimal("1170"))  # totals disagree with lines
+    errs = validate(inv, {}, 0.75).errors
+    assert any("CGST total 85 != sum of CGST tax lines 57.5" in e for e in errs)
+    assert any("SGST total" in e for e in errs)
+
+
 def test_tax_at_rate_no_line_carries_is_caught():
     inv = multi_rate_invoice(tax_lines=multi_rate_invoice().tax_lines + [TaxLine(kind="IGST", rate_pct=28, amount=10)])
     assert any("no line item carries that rate" in e for e in validate(inv, {}, 0.75).errors)
@@ -106,7 +113,7 @@ def test_tally_mapping_changes_ledger_names(tmp_path):
 
 
 def test_tally_round_off_entry_balances_voucher(tmp_path):
-    inv = multi_rate_invoice(grand_total=Decimal("1170.40"))  # printed total includes Rs.0.40 round-off
+    inv = multi_rate_invoice(grand_total=Decimal("1115.40"))  # printed total includes Rs.0.40 round-off
     export_tally_xml([(inv, validate(inv, {}, 0.75))], load_mapping(MAPPINGS["tally"]), tmp_path / "t.xml")
     v = ET.parse(tmp_path / "t.xml").getroot().find(".//VOUCHER")
     assert sum(Decimal(a.text) for a in v.iter("AMOUNT")) == 0

@@ -31,10 +31,19 @@ def _cfg(demo: str) -> dict[str, Any]:
     return json.loads((ROOT / demo / "config.json").read_text())
 
 
-def check_invoice(adapter, tmp: Path) -> dict[str, Any]:
+def _adapter_for(source, llm_module):
+    """Each demo has its own copy of llm.py (own usage log, own config), so every demo needs its own adapter.
+
+    ``source`` is a factory taking the demo's llm module, or a ready adapter (used by tests)."""
+    return source(llm_module) if callable(source) and not hasattr(source, "available") else source
+
+
+def check_invoice(source, tmp: Path) -> dict[str, Any]:
     from invoice_to_erp import llm
     from invoice_to_erp.llm import OfflineAdapter
     from invoice_to_erp.pipeline import run
+
+    adapter = _adapter_for(source, llm)
 
     cfg = _cfg("invoice_to_erp")
     llm.configure(cfg.get("llm"))
@@ -55,10 +64,12 @@ def check_invoice(adapter, tmp: Path) -> dict[str, Any]:
     }
 
 
-def check_doc_qa(adapter) -> dict[str, Any]:
+def check_doc_qa(source) -> dict[str, Any]:
     from doc_qa_citations import llm
     from doc_qa_citations.core import build, load_config
     from doc_qa_citations.evaluate import evaluate
+
+    adapter = _adapter_for(source, llm)
 
     base = ROOT / "doc_qa_citations"
     composer = build(load_config(base / "config.json"), base)
@@ -76,10 +87,12 @@ def check_doc_qa(adapter) -> dict[str, Any]:
     return out
 
 
-def check_leads(adapter, tmp: Path) -> dict[str, Any]:
+def check_leads(source, tmp: Path) -> dict[str, Any]:
     from inbound_lead_qualifier import llm
     from inbound_lead_qualifier.llm import OfflineAdapter
     from inbound_lead_qualifier.pipeline import LeadPipeline
+
+    adapter = _adapter_for(source, llm)
 
     cfg = _cfg("inbound_lead_qualifier")
     leads = json.loads((ROOT / "inbound_lead_qualifier" / "samples" / "leads.json").read_text())
@@ -101,12 +114,16 @@ def check_leads(adapter, tmp: Path) -> dict[str, Any]:
             "drafts_polished_by_llm": polished, "usage": llm.usage_summary()}
 
 
-def run_checks(adapter) -> dict[str, Any]:
+def run_checks(source) -> dict[str, Any]:
+    """``source``: factory ``f(llm_module) -> adapter`` (real runs: ``lambda m: m.get_adapter()``) or one adapter."""
+    from invoice_to_erp import llm as inv_llm
+
     with tempfile.TemporaryDirectory() as t:
         tmp = Path(t)
-        return {"provider": adapter.name, "model": getattr(adapter, "model", "?"),
-                "invoice_to_erp": check_invoice(adapter, tmp), "doc_qa_citations": check_doc_qa(adapter),
-                "inbound_lead_qualifier": check_leads(adapter, tmp)}
+        ref = _adapter_for(source, inv_llm)
+        return {"provider": ref.name, "model": getattr(ref, "model", "?"),
+                "invoice_to_erp": check_invoice(source, tmp), "doc_qa_citations": check_doc_qa(source),
+                "inbound_lead_qualifier": check_leads(source, tmp)}
 
 
 def render(res: dict[str, Any]) -> str:
@@ -156,7 +173,7 @@ def main() -> int:
         print("SKIPPED: no GEMINI_API_KEY or ANTHROPIC_API_KEY in the environment (or LLM_PROVIDER=offline). "
               "Nothing was sent anywhere.")
         return 0
-    section = render(run_checks(adapter))
+    section = render(run_checks(lambda llm_module: llm_module.get_adapter()))
     print(section)
     if a.write:
         write_results(section, ROOT / "RESULTS.md")

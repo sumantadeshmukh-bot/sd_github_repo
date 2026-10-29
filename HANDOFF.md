@@ -18,12 +18,12 @@ Branch: `claude/gifted-mendel-cms2p8` (to check: the brief named `hardening-and-
 ## Test results (offline, Python 3.13)
 | Suite | Result |
 |---|---|
-| invoice_to_erp | 25 passed, 2 skipped (live-model test needs a key; OCR test needs Tesseract) |
+| invoice_to_erp | 26 passed, 2 skipped (live-model test needs a key; OCR test needs Tesseract) |
 | doc_qa_citations | 32 passed |
 | inbound_lead_qualifier | 35 passed |
-| evidence_pack | 49 passed (includes LibreOffice page counts: report 7 pages, board summary 2) |
-| online_check (root `tests/`) | 3 passed |
-| **Total** | **144 passed, 2 skipped, 0 failed** |
+| evidence_pack | 52 passed (includes LibreOffice page counts: report 7 pages, board summary 2) |
+| online_check (root `tests/`) | 4 passed |
+| **Total** | **149 passed, 2 skipped, 0 failed** |
 
 `./run_all.sh` exits 0 and prints "SKIPPED" for the online check because there is no key.
 

@@ -25,7 +25,10 @@ def enrich(uc: UseCase, cfg: dict[str, Any]) -> UseCase:
         if uc.sensitive_effective:
             uc.assumptions.append(f"{uc.id}: sensitive data inferred from the data categories (not stated in the register).")
     vendor = uc.model_vendor.lower()
-    uc.third_party = bool(vendor) and not any(m in vendor for m in cfg["in_house_markers"])
+    # in-house only when the register says so; a blank vendor stays "third party" so vendor checks still apply
+    uc.third_party = not any(m in vendor for m in cfg["in_house_markers"])
+    if not vendor:
+        uc.assumptions.append(f"{uc.id}: model/vendor not stated, so vendor-risk checks are applied as if a third party supplies it.")
     probe = f"{vendor} {uc.name} {uc.purpose}".lower()
     declared = uc.controls.get("uses_genai")
     uc.uses_genai = declared == "yes" if declared in ("yes", "no") else any(m in probe for m in cfg["genai_markers"])

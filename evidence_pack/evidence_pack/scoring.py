@@ -82,21 +82,30 @@ def build_gaps(reg: Register, cfg: Config, tiers, scores) -> list[Gap]:
     values, tf = cfg.scoring["result_value"], cfg.tiering["tier_factor"]
     top_tier = max((tiers[u.id].tier for u in reg.use_cases), key=TIER_ORDER.__getitem__)
     gaps: list[Gap] = []
+    worse_first = {"fail": 0, "unknown": 1, "partial": 2, "pass": 3, "na": 4}
     for cid, meta in cfg.checks.items():
+        if meta["scope"] == "org":
+            # one gap for the organisation, from the WORST answer across use cases (independent of register order)
+            per_uc = {uc.id: next(r for r in scores[uc.id][meta["area"]].results if r.check_id == cid) for uc in reg.use_cases}
+            worst = min(per_uc.values(), key=lambda r: worse_first[r.result])
+            if worst.result in ("pass", "na"):
+                continue
+            affected = [u for u, r in per_uc.items() if r.result == worst.result]
+            detail = worst.note + (f" (answered this way for: {', '.join(affected)})" if len(affected) < len(per_uc) else "")
+            sev_score = round(meta["weight"] * (1 - values[worst.result]) * tf[top_tier], 1)
+            wording = meta["gap"] + (" (no evidence provided)" if worst.result == "unknown" else "")
+            gaps.append(Gap(cid, meta["area"], "ALL", wording, detail, worst.result, cfg.severity(sev_score), sev_score,
+                            "AI governance lead (to assign)", top_tier))
+            continue
         for uc in reg.use_cases:
             cr = next(r for r in scores[uc.id][meta["area"]].results if r.check_id == cid)
             if cr.result in ("pass", "na"):
                 continue
-            if meta["scope"] == "org" and uc is not reg.use_cases[0]:
-                continue                       # organisation-level gaps are listed once
-            org_level = meta["scope"] == "org"
-            tier = top_tier if org_level else tiers[uc.id].tier
+            tier = tiers[uc.id].tier
             sev_score = round(meta["weight"] * (1 - values[cr.result]) * tf[tier], 1)
             wording = meta["gap"] + (" (no evidence provided)" if cr.result == "unknown" else "")
-            gaps.append(Gap(cid, meta["area"], "ALL" if org_level else uc.id, wording, cr.note, cr.result,
-                            cfg.severity(sev_score), sev_score,
-                            "AI governance lead (to assign)" if org_level else (uc.business_owner or "Owner to be named"),
-                            tier))
+            gaps.append(Gap(cid, meta["area"], uc.id, wording, cr.note, cr.result, cfg.severity(sev_score), sev_score,
+                            uc.business_owner or "Owner to be named", tier))
     gaps.sort(key=lambda g: (-g.severity_score, g.check_id, g.use_case_id))
     return gaps
 

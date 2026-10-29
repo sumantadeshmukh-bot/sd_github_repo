@@ -1,6 +1,6 @@
 # Results (29 Oct 2026, offline mode, Python 3.13)
 
-All four tools ran end to end with **no API keys and no network calls to external services**: `./run_all.sh` exited 0. **144 tests passed and 2 were skipped** (invoice_to_erp 25 + 2 skipped, doc_qa_citations 32, inbound_lead_qualifier 35, evidence_pack 49, online_check 3). The two skips are the live-model test (no API key) and the OCR test (Tesseract not installed). Before this round the three demos had 24 tests.
+All four tools ran end to end with **no API keys and no network calls to external services**: `./run_all.sh` exited 0. **149 tests passed and 2 were skipped** (invoice_to_erp 26 + 2 skipped, doc_qa_citations 32, inbound_lead_qualifier 35, evidence_pack 52, online_check 4). The two skips are the live-model test (no API key) and the OCR test (Tesseract not installed). Before this round the three demos had 24 tests.
 
 <!-- online-run:start -->
 ## Online run (real model)
@@ -55,7 +55,7 @@ The run produced 7 draft replies, all headed "DRAFT - NOT SENT". The audit log m
 New in this version: the CRM was written as `crm_leads.csv.enc` (Fernet, throwaway demo key) and exported back to 8 rows; 35 tests cover rate limiting (`429` + `Retry-After`), oversized bodies (`413`), missing or invalid length (`411`, `400`), wrong content type (`415`), over-nested JSON, JSON log lines without personal data, wrong or missing keys, key rotation and the dev-mode plaintext fallback. The rate limiter and size limits were tested with local requests only, not under real load.
 
 ## Tool 4: evidence_pack
-Both synthetic samples ran (49 tests):
+Both synthetic samples ran (52 tests):
 
 | | Nimbus Pay (Demo), fintech, 120 staff | Hemavati Finance (Demo), NBFC |
 |---|---|---|

@@ -44,3 +44,15 @@ def test_skips_cleanly_without_key(monkeypatch, capsys):
         monkeypatch.delenv(k, raising=False)
     monkeypatch.setattr(sys, "argv", ["online_check.py"])
     assert online_check.main() == 0 and "SKIPPED" in capsys.readouterr().out
+
+
+def test_each_demo_gets_its_own_adapter_and_usage_log():
+    """A real run must create one adapter per demo module so usage lands in that demo's own log."""
+    seen = []
+
+    def factory(llm_module):
+        seen.append(llm_module.__name__)
+        return FakeAdapter()
+
+    online_check.run_checks(factory)
+    assert seen == ["invoice_to_erp.llm", "invoice_to_erp.llm", "doc_qa_citations.llm", "inbound_lead_qualifier.llm"]

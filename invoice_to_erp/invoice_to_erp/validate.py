@@ -86,6 +86,11 @@ def validate(inv: Invoice, seen: dict[str, str], review_threshold: float) -> Val
         if abs(s - inv.taxable_value) > LINE_TOL:
             r.errors.append(f"Sum of line amounts {s} != taxable value {inv.taxable_value}")
     tax_total = inv.cgst + inv.sgst + inv.igst
+    for kind in ("CGST", "SGST", "IGST"):  # per-slab tax lines must add up to the totals used for the grand total
+        lines_sum = sum((tl.amount for tl in inv.tax_lines if tl.kind == kind), Decimal("0"))
+        total = getattr(inv, kind.lower())
+        if inv.tax_lines and abs(lines_sum - total) > LINE_TOL:
+            r.errors.append(f"{kind} total {total} != sum of {kind} tax lines {lines_sum}")
     multi_rate = inv.tax_rate_pct is None and bool(inv.line_items) and all(
         li.tax_rate_pct is not None for li in inv.line_items)
     if multi_rate:  # several GST rates on one invoice: check each rate's slab separately
