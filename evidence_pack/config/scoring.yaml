@@ -1,0 +1,15 @@
+# How check results become 1-4 scores and gap severities.
+result_value: {pass: 1.0, partial: 0.5, fail: 0.0, unknown: 0.0}   # "unknown" = no evidence provided
+# Score bands on the share of applicable weighted points earned (lower bound of each band).
+bands: {1: 0.0, 2: 0.25, 3: 0.55, 4: 0.85}
+# Months since the last validation after which a use case is overdue, by tier
+# (up to 2x this is "partial"; beyond it is "fail").
+validation_max_age_months: {High: 6, Medium: 12, Low: 18}
+# Incidents in 12 months at or above this, without a post-incident review, is a "fail" (else "partial").
+incident_fail_threshold: 3
+# Gap severity score = check weight x (1 - result value) x tier factor (tiering.yaml).
+severity_thresholds: {High: 7.0, Medium: 3.0}      # >= High -> High; >= Medium -> Medium; else Low
+# Fields that must be filled for a register entry to count as complete.
+core_fields: [id, name, business_owner, purpose, model_vendor, data_categories, users_affected,
+              decision_impact, human_in_loop, hosting_location, monitoring, last_validation_date, incidents_12m]
+placeholder_owners: [tbd, n/a, na, none, unknown, "-", team, tbc]

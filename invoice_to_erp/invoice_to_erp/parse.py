@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import logging
 import re
+import shutil
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -19,7 +20,7 @@ from pydantic import ValidationError
 
 from .gstin import STATE_BY_NAME, STATE_CODES
 from .llm import LLMAdapter, OfflineAdapter
-from .models import Invoice, LineItem
+from .models import Invoice, LineItem, TaxLine
 
 log = logging.getLogger(__name__)
 
@@ -28,14 +29,36 @@ GSTIN_TOKEN = r"\b(\d{2}[A-Z0-9]{13})\b"
 DATE_FORMATS = ("%d-%b-%Y", "%Y-%m-%d", "%d/%m/%Y", "%d.%m.%Y", "%d %b %Y")
 LINE_RE = re.compile(
     r"^(?:\d{1,3}\s+)?(?P<desc>[A-Za-z].*?)\s+(?P<hsn>\d{4,8})\s+(?P<qty>\d+(?:\.\d+)?)\s+"
-    + r"(?P<rate>[\d,]+\.\d{2})\s+(?P<amt>[\d,]+\.\d{2})$"
+    + r"(?P<rate>[\d,]+\.\d{2})\s+(?P<amt>[\d,]+\.\d{2})(?:\s+(?P<gst>\d+(?:\.\d+)?)\s*%)?$"
 )
+TAX_RE = re.compile(r"\b(cgst|sgst|igst)\b[^\d\n]*(\d+(?:\.\d+)?)\s*%[^\d\n]*" + AMT, re.IGNORECASE)
 HEADER_WORDS = {"Description", "Item", "Sl"}
 
 
-def extract_text(pdf_path: Path) -> str:
+def ocr_available() -> bool:
+    """True when pytesseract is importable and the tesseract binary is on PATH."""
+    try:
+        import pytesseract  # noqa: F401  (availability probe only)
+    except ImportError:
+        return False
+    return shutil.which("tesseract") is not None
+
+
+def extract_text(pdf_path: Path, ocr: bool = False) -> str:
+    """Text layer via pdfplumber. With ``ocr=True``, pages with no text layer are OCR'd (if installed)."""
     with pdfplumber.open(pdf_path) as pdf:
-        return "\n".join(page.extract_text() or "" for page in pdf.pages)
+        pages = []
+        for page in pdf.pages:
+            txt = page.extract_text() or ""
+            if ocr and not txt.strip():
+                if ocr_available():
+                    import pytesseract
+                    txt = pytesseract.image_to_string(page.to_image(resolution=300).original)
+                else:
+                    log.warning("OCR requested for %s but pytesseract/tesseract is not installed; skipping OCR",
+                                pdf_path.name)
+            pages.append(txt)
+        return "\n".join(pages)
 
 
 def _dec(s: str) -> Decimal | None:
@@ -114,19 +137,20 @@ def parse_offline(text: str, source_file: str) -> Invoice:
         m = LINE_RE.match(raw.strip())
         if m and m.group("desc").split()[0] not in HEADER_WORDS:
             inv.line_items.append(LineItem(description=m["desc"], hsn_sac=m["hsn"], quantity=_dec(m["qty"]),
-                                           rate=_dec(m["rate"]), amount=_dec(m["amt"])))
+                                           rate=_dec(m["rate"]), amount=_dec(m["amt"]),
+                                           tax_rate_pct=_dec(m["gst"]) if m["gst"] else None))
     conf["line_items"] = 1.0 if inv.line_items else 0.0
 
     taxable, conf["taxable_value"] = _search(
         [(r"(?:Taxable\s*Value|Sub\s*Total|Total\s*Before\s*Tax)[^\d\n]*" + AMT, 1.0)], text)
     inv.taxable_value = _dec(taxable) if taxable else None
-    for tax in ("cgst", "sgst", "igst"):
-        m = re.search(tax + r"[^\d\n]*(\d+(?:\.\d+)?)\s*%[^\d\n]*" + AMT, text, re.IGNORECASE)
-        if m:
-            setattr(inv, tax, _dec(m.group(2)))
-            rate = _dec(m.group(1))
-            inv.tax_rate_pct = rate * 2 if tax in ("cgst", "sgst") else rate
-    conf["tax"] = 1.0 if inv.tax_rate_pct is not None else 0.0
+    for m in TAX_RE.finditer(text):  # one match per printed tax line (several rates -> several lines)
+        inv.tax_lines.append(TaxLine(kind=m.group(1).upper(), rate_pct=_dec(m.group(2)), amount=_dec(m.group(3))))
+    for tl in inv.tax_lines:
+        setattr(inv, tl.kind.lower(), getattr(inv, tl.kind.lower()) + tl.amount)
+    rates = {tl.effective_gst_pct for tl in inv.tax_lines}
+    inv.tax_rate_pct = rates.pop() if len(rates) == 1 else None
+    conf["tax"] = 1.0 if inv.tax_lines else 0.0
     total, conf["grand_total"] = _search(
         [(r"(?:Grand\s*Total|Total\s*Amount\s*Payable|Invoice\s*Total|Amount\s*Payable)[^\d\n]*" + AMT, 1.0)], text)
     inv.grand_total = _dec(total) if total else None
@@ -140,15 +164,16 @@ LLM_SYSTEM = (
     "Return JSON with keys: invoice_no, invoice_date (YYYY-MM-DD), supplier_name, supplier_gstin, "
     "buyer_name, buyer_gstin, place_of_supply (2-digit state code), line_items "
     "[{description, hsn_sac, quantity, rate, amount}], taxable_value, cgst, sgst, igst, "
-    "tax_rate_pct, grand_total. Use null for anything not present; never guess."
+    "tax_rate_pct (null if lines have different rates; then set tax_rate_pct on each line item), "
+    "tax_lines [{kind: CGST|SGST|IGST, rate_pct, amount}], grand_total. Use null for anything not present; never guess."
 )
 CROSS_CHECK = ("invoice_no", "supplier_gstin", "buyer_gstin", "grand_total", "taxable_value")
 
 
-def parse(pdf_path: Path, adapter: LLMAdapter | None = None) -> Invoice:
+def parse(pdf_path: Path, adapter: LLMAdapter | None = None, ocr: bool = False) -> Invoice:
     """Parse one PDF. Uses the LLM when available, always cross-checked by regex."""
     adapter = adapter or OfflineAdapter()
-    text = extract_text(pdf_path)
+    text = extract_text(pdf_path, ocr)
     baseline = parse_offline(text, pdf_path.name)
     if not adapter.available:
         return baseline

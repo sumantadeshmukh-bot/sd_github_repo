@@ -57,7 +57,7 @@ def results(tmp_path_factory) -> dict:
 
 def test_end_to_end_flags_expected_invoices(results):
     s, rpt = results["summary"], results["report"]
-    assert (s.total, s.ok, s.exceptions) == (5, 2, 3)
+    assert (s.total, s.ok, s.exceptions) == (6, 3, 3)
     assert "inv03_coromandel.pdf" in rpt and "7800.00" in rpt  # arithmetic error
     assert "fails checksum" in rpt                               # bad GSTIN
     assert "Duplicate of inv01_kaveri.pdf" in rpt                # duplicate

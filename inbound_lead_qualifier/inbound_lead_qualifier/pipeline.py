@@ -19,7 +19,8 @@ from urllib.parse import urlparse
 
 from pydantic import ValidationError
 
-from .llm import LLMAdapter, get_adapter
+from .crmstore import CrmStore
+from .llm import LLMAdapter, configure, get_adapter
 from .models import Enquiry
 
 log = logging.getLogger(__name__)
@@ -113,9 +114,11 @@ class LeadPipeline:
         self.cfg = cfg
         self.out = base / cfg["output_dir"]
         (self.out / "drafts").mkdir(parents=True, exist_ok=True)
-        self.crm_path = self.out / "crm_leads.csv"
+        self.crm = CrmStore(self.out, CRM_COLUMNS, cfg.get("encryption"))  # encrypted at rest when a key is set
+        self.crm_path = self.crm.path
         self.parked_path = self.out / "parked_leads.csv"
         self.audit_path = self.out / "audit_log.jsonl"
+        configure(cfg.get("llm"))
         self.adapter = adapter or get_adapter()
 
     def now(self) -> datetime:
@@ -243,7 +246,7 @@ class LeadPipeline:
             draft_path = str(self.draft(e, tier, lead_id))
             self.audit(lead_id, "reply_drafted", path=draft_path, sent=False)
 
-        self._write_csv(self.crm_path, CRM_COLUMNS, {
+        self.crm.upsert({
             "lead_id": lead_id, "received_at": e.submitted_at.isoformat(), "status": status, "tier": tier,
             "score": score, "score_breakdown": json.dumps(parts), "name": e.name, "email": e.email, "phone": e.phone,
             "company": e.company, "website_domain": enr["website_domain"], "role": e.role,

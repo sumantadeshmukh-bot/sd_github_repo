@@ -1,0 +1,8 @@
+Bill Date,Bill Number,Vendor Name,Currency Code,GST Treatment,GST Identification Number (GST IN),Source of Supply,Destination of Supply,Item Name,HSN/SAC,Quantity,Rate,Item Tax,Item Tax %,Item Total,Account,Notes
+2026-10-14,KPT/2026-27/0142,Kaveri Precision Tools Pvt Ltd (Demo),INR,business_gst,29AAKCK1234M1Z7,Karnataka,Karnataka,Cordless drill 18V,8467,4,6250.00,GST18,18,25000.00,Cost of Goods Sold,
+2026-10-14,KPT/2026-27/0142,Kaveri Precision Tools Pvt Ltd (Demo),INR,business_gst,29AAKCK1234M1Z7,Karnataka,Karnataka,HSS drill bit set,8207,10,899.00,GST18,18,8990.00,Cost of Goods Sold,
+2026-10-16,SCS-INV-0098,Sahyadri Cloud Services LLP (Demo),INR,business_gst,27AAQFS5678P1ZX,Maharashtra,Karnataka,Managed cloud hosting Oct 2026,998315,1,48000.00,IGST18,18,48000.00,Cost of Goods Sold,
+2026-10-16,SCS-INV-0098,Sahyadri Cloud Services LLP (Demo),INR,business_gst,27AAQFS5678P1ZX,Maharashtra,Karnataka,Backup and DR support,998713,1,12500.00,IGST18,18,12500.00,Cost of Goods Sold,
+2026-10-22,HSG/0233,Hoysala Stationers and Gifts (Demo),INR,business_gst,29AAHFH2345K1Z5,Karnataka,Karnataka,Steel office cabinet,9403,2,14500.00,GST18,18,29000.00,Cost of Goods Sold,
+2026-10-22,HSG/0233,Hoysala Stationers and Gifts (Demo),INR,business_gst,29AAHFH2345K1Z5,Karnataka,Karnataka,A4 copier paper 75gsm ream,4802,100,310.00,GST12,12,31000.00,Cost of Goods Sold,
+2026-10-22,HSG/0233,Hoysala Stationers and Gifts (Demo),INR,business_gst,29AAHFH2345K1Z5,Karnataka,Karnataka,Printed notebooks,4820,50,120.00,GST5,5,6000.00,Cost of Goods Sold,

@@ -1,0 +1,7 @@
+# Python 3.11+
+pydantic==2.13.5
+pdfplumber==0.11.10
+reportlab==5.0.1
+pytest==9.2.0
+# Optional (only for --ocr on scanned PDFs; also needs the Tesseract program installed):
+# pytesseract==<pin the version you install>

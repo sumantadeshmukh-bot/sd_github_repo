@@ -1,175 +1,393 @@
 {
-  "cases": 12,
-  "answerable": 10,
-  "hit_rate_at_1": 1.0,
-  "hit_rate_at_3": 1.0,
-  "citation_accuracy": 1.0,
-  "refusal_correctness": 1.0,
-  "passed": 12,
-  "rows": [
-    {
-      "q": "How many days of earned leave do I get per year?",
-      "role": "employee",
-      "expect": "HR-LEAVE-01#earned-leave-0",
-      "top": [
-        "HR-LEAVE-01#earned-leave-0"
-      ],
-      "found": true,
-      "cited": [
-        "HR-LEAVE-01#earned-leave-0"
-      ],
-      "score": 0.478,
-      "pass": true
-    },
-    {
-      "q": "When is a medical certificate needed for sick leave?",
-      "role": "employee",
-      "expect": "HR-LEAVE-01#sick-leave-0",
-      "top": [
-        "HR-LEAVE-01#sick-leave-0"
-      ],
-      "found": true,
-      "cited": [
-        "HR-LEAVE-01#sick-leave-0"
-      ],
-      "score": 0.529,
-      "pass": true
-    },
-    {
-      "q": "What is the hotel limit per night in metro cities?",
-      "role": "employee",
-      "expect": "FIN-TRAVEL-02#hotel-limits-0",
-      "top": [
-        "FIN-TRAVEL-02#hotel-limits-0"
-      ],
-      "found": true,
-      "cited": [
-        "FIN-TRAVEL-02#hotel-limits-0"
-      ],
-      "score": 0.526,
-      "pass": true
-    },
-    {
-      "q": "What is the deadline for submitting expense claims after travel?",
-      "role": "employee",
-      "expect": "FIN-TRAVEL-02#expense-claims-0",
-      "top": [
-        "FIN-TRAVEL-02#expense-claims-0"
-      ],
-      "found": true,
-      "cited": [
-        "FIN-TRAVEL-02#expense-claims-0"
-      ],
-      "score": 0.623,
-      "pass": true
-    },
-    {
-      "q": "Is multi-factor authentication mandatory for VPN?",
-      "role": "employee",
-      "expect": "IT-SEC-03#passwords-and-multi-factor-authentication-0",
-      "top": [
-        "IT-SEC-03#passwords-and-multi-factor-authentication-0"
-      ],
-      "found": true,
-      "cited": [
-        "IT-SEC-03#passwords-and-multi-factor-authentication-0"
-      ],
-      "score": 0.601,
-      "pass": true
-    },
-    {
-      "q": "Can I paste customer personal data into public AI tools?",
-      "role": "employee",
-      "expect": "IT-SEC-03#use-of-ai-tools-0",
-      "top": [
-        "IT-SEC-03#use-of-ai-tools-0"
-      ],
-      "found": true,
-      "cited": [
-        "IT-SEC-03#use-of-ai-tools-0"
-      ],
-      "score": 0.602,
-      "pass": true
-    },
-    {
-      "q": "How do I withdraw my consent for marketing?",
-      "role": "public",
-      "expect": "LEGAL-PRIV-04#your-consent-and-withdrawal-0",
-      "top": [
-        "LEGAL-PRIV-04#your-consent-and-withdrawal-0"
-      ],
-      "found": true,
-      "cited": [
-        "LEGAL-PRIV-04#your-consent-and-withdrawal-0"
-      ],
-      "score": 0.444,
-      "pass": true
-    },
-    {
-      "q": "How many quotations are required for a purchase?",
-      "role": "employee",
-      "expect": "FIN-PROC-05#quotations-0",
-      "top": [
-        "FIN-PROC-05#quotations-0"
-      ],
-      "found": true,
-      "cited": [
-        "FIN-PROC-05#quotations-0"
-      ],
-      "score": 0.418,
-      "pass": true
-    },
-    {
-      "q": "How long does a refund take to reach my original payment method?",
-      "role": "public",
-      "expect": "CS-REFUND-06#how-refunds-are-paid-0",
-      "top": [
-        "CS-REFUND-06#how-refunds-are-paid-0"
-      ],
-      "found": true,
-      "cited": [
-        "CS-REFUND-06#how-refunds-are-paid-0"
-      ],
-      "score": 0.329,
-      "pass": true
-    },
-    {
-      "q": "Within how many hours must cyber incidents be reported to CERT-In?",
-      "role": "leadership",
-      "expect": "IT-SEC-03#incident-escalation-and-regulator-reporting-0",
-      "top": [
-        "IT-SEC-03#incident-escalation-and-regulator-reporting-0"
-      ],
-      "found": true,
-      "cited": [
-        "IT-SEC-03#incident-escalation-and-regulator-reporting-0"
-      ],
-      "score": 0.357,
-      "pass": true
-    },
-    {
-      "q": "Within how many hours must cyber incidents be reported to CERT-In?",
-      "role": "employee",
-      "expect": null,
-      "top": [
-        "IT-SEC-03#reporting-a-security-incident-0"
-      ],
-      "found": false,
-      "cited": [],
-      "score": 0.204,
-      "pass": true
-    },
-    {
-      "q": "What is the share price target for next quarter?",
-      "role": "leadership",
-      "expect": null,
-      "top": [
-        "IT-SEC-03#privileged-access-reviews-0"
-      ],
-      "found": false,
-      "cited": [],
-      "score": 0.106,
-      "pass": true
-    }
-  ]
+  "retriever": "tfidf",
+  "dev": {
+    "cases": 12,
+    "answerable": 10,
+    "should_refuse": 2,
+    "hit_rate_at_1": 1.0,
+    "hit_rate_at_3": 1.0,
+    "citation_accuracy": 1.0,
+    "refusal_accuracy": 1.0,
+    "refusal_correctness": 1.0,
+    "passed": 12,
+    "rows": [
+      {
+        "q": "How many days of earned leave do I get per year?",
+        "role": "employee",
+        "expect": "HR-LEAVE-01#earned-leave-0",
+        "top": [
+          "HR-LEAVE-01#earned-leave-0"
+        ],
+        "found": true,
+        "cited": [
+          "HR-LEAVE-01#earned-leave-0"
+        ],
+        "score": 0.477,
+        "pass": true
+      },
+      {
+        "q": "When is a medical certificate needed for sick leave?",
+        "role": "employee",
+        "expect": "HR-LEAVE-01#sick-leave-0",
+        "top": [
+          "HR-LEAVE-01#sick-leave-0"
+        ],
+        "found": true,
+        "cited": [
+          "HR-LEAVE-01#sick-leave-0"
+        ],
+        "score": 0.528,
+        "pass": true
+      },
+      {
+        "q": "What is the hotel limit per night in metro cities?",
+        "role": "employee",
+        "expect": "FIN-TRAVEL-02#hotel-limits-0",
+        "top": [
+          "FIN-TRAVEL-02#hotel-limits-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-TRAVEL-02#hotel-limits-0"
+        ],
+        "score": 0.545,
+        "pass": true
+      },
+      {
+        "q": "What is the deadline for submitting expense claims after travel?",
+        "role": "employee",
+        "expect": "FIN-TRAVEL-02#expense-claims-0",
+        "top": [
+          "FIN-TRAVEL-02#expense-claims-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-TRAVEL-02#expense-claims-0"
+        ],
+        "score": 0.623,
+        "pass": true
+      },
+      {
+        "q": "Is multi-factor authentication mandatory for VPN?",
+        "role": "employee",
+        "expect": "IT-SEC-03#passwords-and-multi-factor-authentication-0",
+        "top": [
+          "IT-SEC-03#passwords-and-multi-factor-authentication-0"
+        ],
+        "found": true,
+        "cited": [
+          "IT-SEC-03#passwords-and-multi-factor-authentication-0"
+        ],
+        "score": 0.601,
+        "pass": true
+      },
+      {
+        "q": "Can I paste customer personal data into public AI tools?",
+        "role": "employee",
+        "expect": "IT-SEC-03#use-of-ai-tools-0",
+        "top": [
+          "IT-SEC-03#use-of-ai-tools-0"
+        ],
+        "found": true,
+        "cited": [
+          "IT-SEC-03#use-of-ai-tools-0"
+        ],
+        "score": 0.602,
+        "pass": true
+      },
+      {
+        "q": "How do I withdraw my consent for marketing?",
+        "role": "public",
+        "expect": "LEGAL-PRIV-04#your-consent-and-withdrawal-0",
+        "top": [
+          "LEGAL-PRIV-04#your-consent-and-withdrawal-0"
+        ],
+        "found": true,
+        "cited": [
+          "LEGAL-PRIV-04#your-consent-and-withdrawal-0"
+        ],
+        "score": 0.444,
+        "pass": true
+      },
+      {
+        "q": "How many quotations are required for a purchase?",
+        "role": "employee",
+        "expect": "FIN-PROC-05#quotations-0",
+        "top": [
+          "FIN-PROC-05#quotations-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-PROC-05#quotations-0"
+        ],
+        "score": 0.473,
+        "pass": true
+      },
+      {
+        "q": "How long does a refund take to reach my original payment method?",
+        "role": "public",
+        "expect": "CS-REFUND-06#how-refunds-are-paid-0",
+        "top": [
+          "CS-REFUND-06#how-refunds-are-paid-0"
+        ],
+        "found": true,
+        "cited": [
+          "CS-REFUND-06#how-refunds-are-paid-0"
+        ],
+        "score": 0.329,
+        "pass": true
+      },
+      {
+        "q": "Within how many hours must cyber incidents be reported to CERT-In?",
+        "role": "leadership",
+        "expect": "IT-SEC-03#incident-escalation-and-regulator-reporting-0",
+        "top": [
+          "IT-SEC-03#incident-escalation-and-regulator-reporting-0"
+        ],
+        "found": true,
+        "cited": [
+          "IT-SEC-03#incident-escalation-and-regulator-reporting-0"
+        ],
+        "score": 0.357,
+        "pass": true
+      },
+      {
+        "q": "Within how many hours must cyber incidents be reported to CERT-In?",
+        "role": "employee",
+        "expect": null,
+        "top": [
+          "IT-SEC-03#reporting-a-security-incident-0"
+        ],
+        "found": false,
+        "cited": [],
+        "score": 0.204,
+        "pass": true
+      },
+      {
+        "q": "What is the share price target for next quarter?",
+        "role": "leadership",
+        "expect": null,
+        "top": [
+          "IT-SEC-03#privileged-access-reviews-0"
+        ],
+        "found": false,
+        "cited": [],
+        "score": 0.106,
+        "pass": true
+      }
+    ]
+  },
+  "heldout": {
+    "cases": 15,
+    "answerable": 11,
+    "should_refuse": 4,
+    "hit_rate_at_1": 0.909,
+    "hit_rate_at_3": 1.0,
+    "citation_accuracy": 0.909,
+    "refusal_accuracy": 1.0,
+    "refusal_correctness": 1.0,
+    "passed": 14,
+    "rows": [
+      {
+        "q": "How many weeks of maternity leave are given?",
+        "role": "employee",
+        "expect": "HR-LEAVE-01#maternity-and-paternity-leave-0",
+        "top": [
+          "HR-LEAVE-01#maternity-and-paternity-leave-0"
+        ],
+        "found": true,
+        "cited": [
+          "HR-LEAVE-01#maternity-and-paternity-leave-0"
+        ],
+        "score": 0.374,
+        "pass": true
+      },
+      {
+        "q": "How far in advance must earned leave be requested?",
+        "role": "employee",
+        "expect": "HR-LEAVE-01#earned-leave-0",
+        "top": [
+          "HR-LEAVE-01#earned-leave-0"
+        ],
+        "found": true,
+        "cited": [
+          "HR-LEAVE-01#earned-leave-0"
+        ],
+        "score": 0.419,
+        "pass": true
+      },
+      {
+        "q": "Can I use my own car for client visits and what is the per-km rate?",
+        "role": "employee",
+        "expect": "FIN-TRAVEL-02#local-conveyance-0",
+        "top": [
+          "FIN-TRAVEL-02#local-conveyance-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-TRAVEL-02#local-conveyance-0"
+        ],
+        "score": 0.354,
+        "pass": true
+      },
+      {
+        "q": "What happens to expense claims filed after 60 days?",
+        "role": "employee",
+        "expect": "FIN-TRAVEL-02#expense-claims-0",
+        "top": [
+          "FIN-TRAVEL-02#expense-claims-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-TRAVEL-02#expense-claims-0"
+        ],
+        "score": 0.564,
+        "pass": true
+      },
+      {
+        "q": "Within what time must a lost laptop be reported?",
+        "role": "employee",
+        "expect": "IT-SEC-03#laptops-and-devices-0",
+        "top": [
+          "IT-SEC-03#laptops-and-devices-0"
+        ],
+        "found": true,
+        "cited": [
+          "IT-SEC-03#laptops-and-devices-0"
+        ],
+        "score": 0.309,
+        "pass": true
+      },
+      {
+        "q": "Do I need written quotations for a Rs 3 lakh purchase?",
+        "role": "employee",
+        "expect": "FIN-PROC-05#quotations-0",
+        "top": [
+          "FIN-PROC-05#quotations-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-PROC-05#quotations-0"
+        ],
+        "score": 0.377,
+        "pass": true
+      },
+      {
+        "q": "How long do you keep my order history?",
+        "role": "public",
+        "expect": "LEGAL-PRIV-04#data-retention-0",
+        "top": [
+          "LEGAL-PRIV-04#what-personal-data-we-collect-0"
+        ],
+        "found": true,
+        "cited": [
+          "LEGAL-PRIV-04#what-personal-data-we-collect-0"
+        ],
+        "score": 0.2,
+        "pass": false
+      },
+      {
+        "q": "Can I return opened software?",
+        "role": "public",
+        "expect": "CS-REFUND-06#non-returnable-items-0",
+        "top": [
+          "CS-REFUND-06#non-returnable-items-0"
+        ],
+        "found": true,
+        "cited": [
+          "CS-REFUND-06#non-returnable-items-0"
+        ],
+        "score": 0.356,
+        "pass": true
+      },
+      {
+        "q": "How soon must I report a damaged item after delivery?",
+        "role": "public",
+        "expect": "CS-REFUND-06#damaged-or-wrong-items-0",
+        "top": [
+          "CS-REFUND-06#damaged-or-wrong-items-0"
+        ],
+        "found": true,
+        "cited": [
+          "CS-REFUND-06#damaged-or-wrong-items-0"
+        ],
+        "score": 0.336,
+        "pass": true
+      },
+      {
+        "q": "Can a department head approve an order of Rs 10 lakh?",
+        "role": "leadership",
+        "expect": "FIN-PROC-05#approval-limits-0",
+        "top": [
+          "FIN-PROC-05#approval-limits-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-PROC-05#approval-limits-0"
+        ],
+        "score": 0.515,
+        "pass": true
+      },
+      {
+        "q": "What is the standard payment period for supplier invoices?",
+        "role": "employee",
+        "expect": "FIN-PROC-05#payment-terms-0",
+        "top": [
+          "FIN-PROC-05#payment-terms-0"
+        ],
+        "found": true,
+        "cited": [
+          "FIN-PROC-05#payment-terms-0"
+        ],
+        "score": 0.381,
+        "pass": true
+      },
+      {
+        "q": "What is the notice period when resigning?",
+        "role": "employee",
+        "expect": null,
+        "top": [
+          "LEGAL-PRIV-04#your-rights-0"
+        ],
+        "found": false,
+        "cited": [],
+        "score": 0.104,
+        "pass": true
+      },
+      {
+        "q": "Which cloud provider hosts our production servers?",
+        "role": "employee",
+        "expect": null,
+        "top": [],
+        "found": false,
+        "cited": [],
+        "score": 0.0,
+        "pass": true
+      },
+      {
+        "q": "How often are administrator accounts reviewed?",
+        "role": "employee",
+        "expect": null,
+        "top": [
+          "LEGAL-PRIV-04#your-consent-and-withdrawal-0"
+        ],
+        "found": false,
+        "cited": [],
+        "score": 0.053,
+        "pass": true
+      },
+      {
+        "q": "Who needs to approve an order worth 2 crore?",
+        "role": "employee",
+        "expect": null,
+        "top": [
+          "FIN-PROC-05#raising-a-purchase-request-0"
+        ],
+        "found": false,
+        "cited": [],
+        "score": 0.084,
+        "pass": true
+      }
+    ]
+  }
 }

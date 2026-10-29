@@ -1,0 +1,112 @@
+# One entry per check. The pass/fail logic lives in evidence_pack/checks.py (keyed by `id`);
+# weights, wording, plan actions and effort live here so they can be edited without code changes.
+# scope: usecase = evaluated per use case | org = evaluated once and applied to every use case.
+checks:
+  - {id: ACC-1, area: accountability, scope: usecase, weight: 2, title: "Named business owner",
+     gap: "No named accountable business owner",
+     action: "Assign a named, accountable owner to every AI use case and record it in the register",
+     effort: S, done_when: "Every register entry has a named owner who has acknowledged the role"}
+  - {id: ACC-2, area: accountability, scope: org, weight: 3, title: "Board-approved AI policy",
+     gap: "No board-approved AI policy",
+     action: "Draft an AI policy (scope, risk appetite, roles, approvals) and take it to the board for approval",
+     effort: M, done_when: "Board minute approving the AI policy"}
+  - {id: ACC-3, area: accountability, scope: org, weight: 2, title: "AI governance owner or committee",
+     gap: "No named AI governance owner or committee",
+     action: "Name an AI governance lead and set up a monthly AI risk forum with a written charter",
+     effort: S, done_when: "Charter approved; first meeting minuted"}
+  - {id: INV-1, area: inventory, scope: usecase, weight: 3, title: "Register entry complete",
+     gap: "Register entry is incomplete",
+     action: "Complete every field of the AI register for each use case (owner, data, vendor, hosting, monitoring)",
+     effort: S, done_when: "100% of core fields filled for every use case"}
+  - {id: INV-2, area: inventory, scope: usecase, weight: 1, title: "Risk tier recorded by the client",
+     gap: "No risk tier recorded in the client's own register",
+     action: "Adopt the agreed risk-tiering rules and record the tier in the register for every use case",
+     effort: S, done_when: "Tier column present and approved by the governance forum"}
+  - {id: INV-3, area: inventory, scope: org, weight: 2, title: "Inventory reviewed regularly",
+     gap: "AI inventory is not reviewed on a fixed cycle",
+     action: "Review the AI inventory every quarter and add a new-use-case intake step before any build or purchase",
+     effort: S, done_when: "Quarterly review minuted; intake form live"}
+  - {id: DAT-1, area: data_governance, scope: usecase, weight: 2, title: "Data categories and personal/sensitive flags declared",
+     gap: "Data categories or personal/sensitive data flags not declared",
+     action: "Document data categories and an explicit personal / sensitive data flag for each use case",
+     effort: S, done_when: "Data-flow map covers every use case"}
+  - {id: DAT-2, area: data_governance, scope: usecase, weight: 3, title: "Lawful basis / consent documented (DPDP)",
+     gap: "Lawful basis or consent for personal data is not documented",
+     action: "Record the DPDP Act lawful basis or consent artefact and notice for each use case that uses personal data",
+     effort: M, done_when: "Consent / notice reference recorded per use case; reviewed by legal"}
+  - {id: DAT-3, area: data_governance, scope: usecase, weight: 2, title: "Retention defined",
+     gap: "Retention and deletion period for personal data is not defined",
+     action: "Define retention and deletion rules (including prompts, logs and vendor-side copies) for each use case",
+     effort: M, done_when: "Retention schedule approved and configured in the system"}
+  - {id: DAT-4, area: data_governance, scope: usecase, weight: 2, title: "Data location known and acceptable",
+     gap: "Data location not recorded, or personal data leaves India without an assessment",
+     action: "Record hosting and data location for each use case; assess cross-border transfers against the DPDP Act position",
+     effort: M, done_when: "Hosting location recorded; cross-border assessment on file where needed"}
+  - {id: LIF-1, area: lifecycle_evals, scope: usecase, weight: 3, title: "Validation is recent for the risk tier",
+     gap: "Validation is missing or overdue for the risk tier",
+     action: "Run and document an independent validation for each overdue use case, highest tier first",
+     effort: L, done_when: "Validation report dated within the tier's maximum age"}
+  - {id: LIF-2, area: lifecycle_evals, scope: usecase, weight: 3, title: "Evals are a release gate",
+     gap: "No evaluation set used as a release gate",
+     action: "Build a held-out evaluation set per use case and block releases and model changes that fail it",
+     effort: M, done_when: "Release checklist requires a passing eval run"}
+  - {id: LIF-3, area: lifecycle_evals, scope: usecase, weight: 2, title: "Bias / fairness testing for customer-affecting use",
+     gap: "No bias or fairness testing for a customer-affecting use case",
+     action: "Test outcomes across relevant customer segments and document the results and thresholds",
+     effort: M, done_when: "Fairness test report on file"}
+  - {id: SEC-1, area: ai_security, scope: usecase, weight: 3, title: "Adversarial / prompt-injection testing",
+     gap: "No regular adversarial or prompt-injection testing",
+     action: "Add prompt-injection and abuse test cases (OWASP GenAI Top 10) to the test suite and run them each release",
+     effort: M, done_when: "Security test cases pass in the release pipeline"}
+  - {id: SEC-2, area: ai_security, scope: usecase, weight: 3, title: "Least-privilege access for tools, agents and credentials",
+     gap: "Tools, agents or credentials are not least-privilege",
+     action: "Review the permissions of every tool, agent and API credential; remove write and admin rights that are not needed",
+     effort: M, done_when: "Access review signed off; credentials scoped and rotated"}
+  - {id: SEC-3, area: ai_security, scope: usecase, weight: 2, title: "Output and data-leak controls",
+     gap: "No output filtering or data-leak controls",
+     action: "Add output filtering and data-loss controls (masking of personal data in prompts, logs and responses)",
+     effort: M, done_when: "Masking and output checks live and tested"}
+  - {id: OVS-1, area: human_oversight, scope: usecase, weight: 3, title: "Human checkpoint matches the risk",
+     gap: "Automated decision without a human checkpoint appropriate to its risk tier",
+     action: "Add a human review step (or a documented override path) to automated decisions in the High and Medium tiers",
+     effort: M, done_when: "Review step live; override rate reported monthly"}
+  - {id: OVS-2, area: human_oversight, scope: usecase, weight: 2, title: "Explainability for customer-affecting use",
+     gap: "Customer-affecting decisions cannot be explained",
+     action: "Provide a plain-language reason for each customer-affecting output and store it with the decision",
+     effort: M, done_when: "Reason codes stored and sampled in QA"}
+  - {id: OVS-3, area: human_oversight, scope: usecase, weight: 2, title: "Customer recourse for automated decisions",
+     gap: "No way for customers to contest an automated decision",
+     action: "Publish a route for customers to contest an automated decision and a service level for responding",
+     effort: S, done_when: "Contest route live; response time tracked"}
+  - {id: VEN-1, area: vendor_risk, scope: usecase, weight: 1, title: "Model and vendor identified",
+     gap: "Model or vendor not identified in the register",
+     action: "Record the model, version and vendor for each use case",
+     effort: S, done_when: "Model and vendor recorded for every use case"}
+  - {id: VEN-2, area: vendor_risk, scope: usecase, weight: 3, title: "Model-change notice or version pinning",
+     gap: "No notice of vendor model changes and no version pinning",
+     action: "Pin model versions and obtain contractual notice of model changes; re-run evals before accepting a change",
+     effort: M, done_when: "Version pinned; notice clause in contract"}
+  - {id: VEN-3, area: vendor_risk, scope: usecase, weight: 3, title: "Vendor exit plan",
+     gap: "No exit plan or fallback for the AI vendor",
+     action: "Write an exit plan for each critical AI vendor (data return, alternative provider, tested fallback)",
+     effort: M, done_when: "Exit plan approved; fallback tested once"}
+  - {id: VEN-4, area: vendor_risk, scope: usecase, weight: 2, title: "Contractual limits on vendor data use",
+     gap: "No contractual limit on vendor use of client data (for example model training)",
+     action: "Add data-use, retention and no-training clauses to the vendor contract or DPA",
+     effort: M, done_when: "Clauses in signed contract or DPA"}
+  - {id: MON-1, area: monitoring_audit, scope: usecase, weight: 3, title: "Monitoring in place",
+     gap: "No continuous performance and drift monitoring",
+     action: "Set up monitoring for quality, drift, cost and misuse with alert thresholds and a named responder",
+     effort: M, done_when: "Dashboard and alerts live; owner named"}
+  - {id: MON-2, area: monitoring_audit, scope: usecase, weight: 2, title: "Incident handling and review",
+     gap: "Incidents are not reviewed, or incident data is missing",
+     action: "Log AI incidents in one register and run a short post-incident review for each",
+     effort: S, done_when: "Incident register in use; reviews on file"}
+  - {id: MON-3, area: monitoring_audit, scope: usecase, weight: 2, title: "Fallback / business continuity plan",
+     gap: "No fallback or business-continuity plan if the AI system fails",
+     action: "Document a manual fallback and recovery steps for each important use case and test it",
+     effort: M, done_when: "Fallback runbook tested"}
+  - {id: MON-4, area: monitoring_audit, scope: org, weight: 2, title: "Risk-based audit cycle",
+     gap: "No risk-based audit cycle covering AI systems",
+     action: "Add AI systems to the internal audit plan, with High-tier use cases audited first",
+     effort: M, done_when: "AI use cases on the approved audit plan"}

@@ -1,0 +1,162 @@
+# SYNTHETIC SAMPLE. Fictional company, fictional people, no real vendors. For demonstration only.
+organisation:
+  name: "Nimbus Pay (Demo) Pvt Ltd"
+  sector: "Fintech (payments and small-ticket lending)"
+  size: "120 staff"
+  as_of: 2026-10-29
+  prepared_by: "Independent AI governance reviewer (demo)"
+org_controls:                  # organisation-wide answers (yes / partial / no; blank = not evidenced)
+  board_approved_ai_policy: draft
+  governance_committee: no
+  inventory_review: annual
+  risk_based_audit: no
+use_cases:
+  - id: UC-01
+    name: KYC document extraction
+    business_owner: "Meera Kulkarni (Demo), Head of Onboarding"
+    purpose: "Read identity and address documents and pre-fill the onboarding form"
+    model_vendor: "ExampleVision API (Demo)"
+    data_categories: [identity documents, name, address, photo]
+    personal_data: yes
+    sensitive_data: yes
+    users_affected: [customers]
+    decision_impact: advisory
+    human_in_loop: yes
+    hosting_location: "India (Mumbai region), vendor cloud"
+    monitoring: basic
+    last_validation_date: 2026-03-15
+    incidents_12m: 1
+    client_risk_tier: Medium
+    controls: {dpdp_basis_documented: yes, retention_defined: partial, evals_release_gate: partial, bias_testing: no,
+               security_testing: partial, least_privilege: yes, output_controls: yes, explainability: yes,
+               model_change_notice: partial, vendor_exit_plan: no, vendor_no_training: yes,
+               incident_postmortem: yes, fallback_plan: yes}
+  - id: UC-02
+    name: Instant credit pre-screening score
+    business_owner: "Arvind Nair (Demo), Chief Risk Officer"
+    purpose: "Score small-ticket loan applications and auto-approve or decline"
+    model_vendor: "In-house gradient-boosted model"
+    data_categories: [bank statement features, bureau score, income, device data]
+    personal_data: yes
+    sensitive_data: yes
+    users_affected: [customers]
+    decision_impact: automated
+    human_in_loop: no
+    hosting_location: "India (own data centre, on-prem)"
+    monitoring: continuous
+    last_validation_date: 2026-01-10
+    incidents_12m: 2
+    client_risk_tier: High
+    controls: {dpdp_basis_documented: yes, retention_defined: yes, evals_release_gate: yes, bias_testing: no,
+               security_testing: partial, least_privilege: yes, output_controls: yes, explainability: partial,
+               customer_recourse: no, incident_postmortem: partial, fallback_plan: yes}
+  - id: UC-03
+    name: Customer support chatbot
+    business_owner: "Divya Menon (Demo), Head of Customer Experience"
+    purpose: "Answer customer questions on payments, limits and disputes"
+    model_vendor: "ExampleAI LLM API (Demo)"
+    data_categories: [customer name, account queries, transaction details]
+    personal_data: yes
+    sensitive_data: no
+    users_affected: [customers]
+    decision_impact: advisory
+    human_in_loop: no
+    hosting_location: "United States (vendor region)"
+    monitoring: none
+    incidents_12m: 3
+    controls: {dpdp_basis_documented: partial, retention_defined: no, evals_release_gate: no, bias_testing: no,
+               security_testing: no, least_privilege: no, output_controls: no, explainability: no,
+               model_change_notice: no, vendor_exit_plan: no, vendor_no_training: unknown,
+               incident_postmortem: no, fallback_plan: no, cross_border_assessed: no}
+  - id: UC-04
+    name: Fraud transaction monitoring
+    business_owner: "Karthik Rao (Demo), Head of Fraud and Disputes"
+    purpose: "Hold or decline suspicious payments in real time"
+    model_vendor: "FraudShield ML platform (Demo vendor)"
+    data_categories: [transaction history, device data, customer id]
+    personal_data: yes
+    sensitive_data: no
+    users_affected: [customers, staff]
+    decision_impact: automated
+    human_in_loop: yes
+    hosting_location: "India (Hyderabad region), vendor cloud"
+    monitoring: continuous
+    last_validation_date: 2026-08-01
+    incidents_12m: 0
+    client_risk_tier: High
+    controls: {dpdp_basis_documented: yes, retention_defined: yes, evals_release_gate: yes, bias_testing: partial,
+               security_testing: yes, least_privilege: yes, output_controls: yes, explainability: yes,
+               customer_recourse: yes, model_change_notice: yes, vendor_exit_plan: partial, vendor_no_training: yes,
+               fallback_plan: yes}
+  - id: UC-05
+    name: Collections reminder voice bot
+    business_owner: "Sameer Joshi (Demo), Head of Collections"
+    purpose: "Call customers about overdue instalments and agree repayment dates"
+    model_vendor: "ExampleVoice LLM agent (Demo)"
+    data_categories: [customer name, phone number, loan balance, voice recordings]
+    personal_data: yes
+    sensitive_data: yes
+    users_affected: [customers]
+    decision_impact: automated
+    human_in_loop: no
+    hosting_location: "India (Mumbai region), vendor cloud"
+    monitoring: basic
+    last_validation_date: 2026-05-20
+    incidents_12m: 1
+    controls: {dpdp_basis_documented: partial, retention_defined: partial, evals_release_gate: no, bias_testing: no,
+               security_testing: no, least_privilege: partial, output_controls: partial, explainability: no,
+               customer_recourse: partial, model_change_notice: no, vendor_exit_plan: no, vendor_no_training: partial,
+               incident_postmortem: no, fallback_plan: partial}
+  - id: UC-06
+    name: Internal policy Q&A assistant
+    business_owner: "Neha Pillai (Demo), Head of Compliance"
+    purpose: "Staff ask questions about internal policies and get cited answers"
+    model_vendor: "ExampleAI LLM API (Demo)"
+    data_categories: [internal policy documents]
+    personal_data: no
+    sensitive_data: no
+    users_affected: [staff]
+    decision_impact: advisory
+    human_in_loop: yes
+    hosting_location: "India (Mumbai region), vendor cloud"
+    monitoring: basic
+    last_validation_date: 2026-07-12
+    incidents_12m: 0
+    client_risk_tier: Low
+    controls: {evals_release_gate: partial, security_testing: no, least_privilege: partial, output_controls: partial,
+               model_change_notice: no, vendor_exit_plan: partial, vendor_no_training: yes}
+  - id: UC-07
+    name: Marketing copy generation
+    business_owner: "Rohan Desai (Demo), Head of Marketing"
+    purpose: "Draft campaign emails and app-store copy for human editing"
+    model_vendor: "ExampleAI LLM API (Demo)"
+    data_categories: [campaign briefs, public product information]
+    personal_data: no
+    sensitive_data: no
+    users_affected: [staff]
+    decision_impact: advisory
+    human_in_loop: yes
+    hosting_location: "United States (vendor region)"
+    monitoring: none
+    incidents_12m: 0
+    client_risk_tier: Low
+    controls: {evals_release_gate: no, security_testing: no, least_privilege: yes, model_change_notice: no,
+               vendor_exit_plan: no, vendor_no_training: no}
+  - id: UC-08
+    name: Developer code assistant
+    business_owner: "Anil Verma (Demo), CTO"
+    purpose: "Suggest code and tests inside the developers' editor"
+    model_vendor: "ExampleCode Assistant SaaS (Demo)"
+    data_categories: [source code]
+    personal_data: no
+    sensitive_data: no
+    users_affected: [staff]
+    decision_impact: advisory
+    human_in_loop: yes
+    hosting_location: "EU (vendor SaaS)"
+    monitoring: none
+    last_validation_date: 2026-06-30
+    incidents_12m: 0
+    client_risk_tier: Low
+    controls: {evals_release_gate: no, security_testing: partial, least_privilege: partial, output_controls: partial,
+               model_change_notice: no, vendor_exit_plan: yes, vendor_no_training: yes}

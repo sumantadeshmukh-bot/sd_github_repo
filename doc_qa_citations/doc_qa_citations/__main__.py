@@ -26,10 +26,12 @@ def main() -> None:
     ap.add_argument("--role", default="employee")
     ap.add_argument("--department", default=None, help="optional metadata filter, e.g. HR, Finance")
     ap.add_argument("--config", default="config.json")
+    ap.add_argument("--retriever", choices=["tfidf", "embedding"], default=None,
+                    help="tfidf (default) or the optional local embedding retriever")
     a = ap.parse_args()
     cfg = load_config(Path(a.config))
     logging.basicConfig(level=cfg.get("log_level", "INFO"), format="%(levelname)s %(name)s: %(message)s")
-    composer = build(cfg)
+    composer = build(cfg, retriever=a.retriever)
     pairs = [(a.role, a.question)] if a.question else DEMO
     for role, q in pairs:
         print(f"\n--- role={role}")

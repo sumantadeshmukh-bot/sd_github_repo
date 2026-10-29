@@ -25,6 +25,27 @@ def duplicate_key(inv: Invoice) -> str:
     return f"{(inv.supplier_gstin or '').upper()}|{norm}|{_fy(inv)}"
 
 
+def _check_rate_slabs(inv: Invoice) -> list[str]:
+    """Per-rate check: tax printed for each effective GST rate must equal rate x that rate's taxable value."""
+    errors: list[str] = []
+    taxable_by_rate: dict[Decimal, Decimal] = {}
+    for li in inv.line_items:
+        taxable_by_rate[li.tax_rate_pct] = taxable_by_rate.get(li.tax_rate_pct, Decimal("0")) + li.amount
+    tax_by_rate: dict[Decimal, Decimal] = {}
+    for tl in inv.tax_lines:
+        tax_by_rate[tl.effective_gst_pct] = tax_by_rate.get(tl.effective_gst_pct, Decimal("0")) + tl.amount
+    if not inv.tax_lines:
+        return ["Multiple GST rates but no per-rate tax lines found"]
+    for rate, taxable in sorted(taxable_by_rate.items()):
+        expected = (taxable * rate / 100).quantize(Decimal("0.01"))
+        actual = tax_by_rate.get(rate, Decimal("0"))
+        if abs(expected - actual) > TOTAL_TOL:
+            errors.append(f"GST {rate:g}% slab: tax {actual} != {rate:g}% of {taxable} ({expected})")
+    for rate in sorted(set(tax_by_rate) - set(taxable_by_rate)):
+        errors.append(f"Tax charged at {rate:g}% but no line item carries that rate")
+    return errors
+
+
 def validate(inv: Invoice, seen: dict[str, str], review_threshold: float) -> ValidationResult:
     """Validate one invoice. ``seen`` maps duplicate keys -> first source file (mutated)."""
     r = ValidationResult(invoice_no=inv.invoice_no, source_file=inv.source_file)
@@ -65,7 +86,18 @@ def validate(inv: Invoice, seen: dict[str, str], review_threshold: float) -> Val
         if abs(s - inv.taxable_value) > LINE_TOL:
             r.errors.append(f"Sum of line amounts {s} != taxable value {inv.taxable_value}")
     tax_total = inv.cgst + inv.sgst + inv.igst
-    if inv.taxable_value is not None and inv.tax_rate_pct is not None:
+    for kind in ("CGST", "SGST", "IGST"):  # per-slab tax lines must add up to the totals used for the grand total
+        lines_sum = sum((tl.amount for tl in inv.tax_lines if tl.kind == kind), Decimal("0"))
+        total = getattr(inv, kind.lower())
+        if inv.tax_lines and abs(lines_sum - total) > LINE_TOL:
+            r.errors.append(f"{kind} total {total} != sum of {kind} tax lines {lines_sum}")
+    multi_rate = inv.tax_rate_pct is None and bool(inv.line_items) and all(
+        li.tax_rate_pct is not None for li in inv.line_items)
+    if multi_rate:  # several GST rates on one invoice: check each rate's slab separately
+        r.warnings.append("Multiple GST rates on this invoice: " + ", ".join(
+            f"{x:g}%" for x in sorted({li.tax_rate_pct for li in inv.line_items})))
+        r.errors.extend(_check_rate_slabs(inv))
+    elif inv.taxable_value is not None and inv.tax_rate_pct is not None:
         exp_tax = (inv.taxable_value * inv.tax_rate_pct / 100).quantize(Decimal("0.01"))
         if abs(exp_tax - tax_total) > TOTAL_TOL:
             r.errors.append(f"Tax {tax_total} != {inv.tax_rate_pct}% of {inv.taxable_value} ({exp_tax})")

@@ -7,6 +7,7 @@ import logging
 from pathlib import Path
 
 from .generate import generate
+from .llm import configure
 from .pipeline import run
 
 
@@ -14,13 +15,17 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="Synthetic GST invoice -> ERP import demo")
     ap.add_argument("--config", default="config.json")
     ap.add_argument("--generate", action="store_true", help="(re)create the synthetic sample PDFs first")
+    ap.add_argument("--ocr", action="store_true", help="OCR pages with no text layer (needs pytesseract + tesseract)")
     args = ap.parse_args()
     cfg = json.loads(Path(args.config).read_text())
     logging.basicConfig(level=cfg.get("log_level", "INFO"), format="%(levelname)s %(name)s: %(message)s")
     in_dir, out_dir = Path(cfg["input_dir"]), Path(cfg["output_dir"])
     if args.generate or not any(in_dir.glob("*.pdf")):
         generate(in_dir)
-    s = run(in_dir, out_dir, cfg["review_confidence_threshold"])
+    configure(cfg.get("llm"))
+    mappings = {k: Path(v) for k, v in cfg.get("mappings", {}).items()}
+    s = run(in_dir, out_dir, cfg["review_confidence_threshold"], ocr=args.ocr or cfg.get("ocr", False),
+            mappings=mappings)
     print(f"\nProcessed {s.total}: OK={s.ok} REVIEW={s.review} EXCEPTION={s.exceptions}")
     for k, v in s.outputs.items():
         print(f"  {k:10s} -> {v}")

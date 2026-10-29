@@ -11,6 +11,8 @@ Scenarios:
        place-of-supply line (forces a low-confidence inference)  layout C
     4  inter-state (DL->KA) IGST, supplier GSTIN bad checksum     layout A
     5  duplicate re-send of invoice 1 in a different layout       layout B
+    6  intra-state (KA->KA) with three GST rates (5/12/18%) on one
+       invoice, per-line rate column, clean                        layout D
 """
 from __future__ import annotations
 
@@ -71,12 +73,14 @@ class Spec:
     # deliberate errors: index -> wrong amount; total override
     bad_line_amounts: dict[int, Decimal] = field(default_factory=dict)
     total_override: Decimal | None = None
+    item_rates: list[Decimal] | None = None  # per-line GST rate (layout D, several rates on one invoice)
 
 
 BUYER = Party("Lotus Leaf Retail Pvt Ltd (Demo)", "12 MG Road, Bengaluru 560001", make_gstin("29", "AAECL7788H"))
 S1 = Party("Kaveri Precision Tools Pvt Ltd (Demo)", "Plot 7, Peenya Industrial Area, Bengaluru", make_gstin("29", "AAKCK1234M"))
 S2 = Party("Sahyadri Cloud Services LLP (Demo)", "Unit 4, Baner Road, Pune", make_gstin("27", "AAQFS5678P"))
 S3 = Party("Coromandel Packaging Co (Demo)", "SIDCO Estate, Guindy, Chennai", make_gstin("33", "AABFC9012Q"))
+S5 = Party("Hoysala Stationers and Gifts (Demo)", "Avenue Road, Bengaluru", make_gstin("29", "AAHFH2345K"))
 _good4 = make_gstin("07", "ABCPY3456R")
 _bad_check = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"[("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".index(_good4[-1]) + 7) % 36]
 S4 = Party("Yamuna Office Supplies (Demo)", "Okhla Phase II, New Delhi", _good4[:-1] + _bad_check)
@@ -99,7 +103,27 @@ SPECS: list[Spec] = [
     Spec("inv05_kaveri_resend.pdf", "B", "KPT/2026-27/0142", "2026-10-14", S1, BUYER, D("18"),
          [("Cordless drill 18V", "8467", D("4"), D("6250.00")),
           ("HSS drill bit set", "8207", D("10"), D("899.00"))]),
+    Spec("inv06_hoysala_multirate.pdf", "D", "HSG/0233", "22-Oct-2026", S5, BUYER, D("18"),
+         [("Steel office cabinet", "9403", D("2"), D("14500.00")),
+          ("A4 copier paper 75gsm ream", "4802", D("100"), D("310.00")),
+          ("Printed notebooks", "4820", D("50"), D("120.00"))],
+         item_rates=[D("18"), D("12"), D("5")]),
 ]
+
+
+def _multi_rate_taxes(spec: Spec, amounts: list[Decimal]) -> list[tuple[str, Decimal, Decimal]]:
+    """(kind, component rate, amount) per GST slab: CGST+SGST halves when intra-state, else IGST."""
+    by_rate: dict[Decimal, Decimal] = {}
+    for rate, amt in zip(spec.item_rates or [], amounts):
+        by_rate[rate] = by_rate.get(rate, D("0")) + amt
+    out: list[tuple[str, Decimal, Decimal]] = []
+    for rate, taxable in sorted(by_rate.items()):
+        if spec.supplier.state == spec.buyer.state:
+            half = (taxable * rate / 2 / 100).quantize(TWO, rounding=ROUND_HALF_UP)
+            out += [("CGST", rate / 2, half), ("SGST", rate / 2, half)]
+        else:
+            out.append(("IGST", rate, (taxable * rate / 100).quantize(TWO, rounding=ROUND_HALF_UP)))
+    return out
 
 
 def _compute(spec: Spec) -> tuple[list[Decimal], Decimal, dict[str, Decimal], Decimal]:
@@ -107,7 +131,11 @@ def _compute(spec: Spec) -> tuple[list[Decimal], Decimal, dict[str, Decimal], De
     for idx, wrong in spec.bad_line_amounts.items():
         amounts[idx] = wrong
     taxable = sum(amounts, D("0"))
-    if spec.supplier.state == spec.buyer.state:
+    if spec.item_rates:
+        taxes: dict[str, Decimal] = {}
+        for kind, _, amt in _multi_rate_taxes(spec, amounts):
+            taxes[kind] = taxes.get(kind, D("0")) + amt
+    elif spec.supplier.state == spec.buyer.state:
         half = (taxable * spec.rate_pct / 2 / 100).quantize(TWO, rounding=ROUND_HALF_UP)
         taxes = {"CGST": half, "SGST": half}
     else:
@@ -141,7 +169,7 @@ def _draw(spec: Spec, path: Path) -> None:
             c.drawString(x, y, t)
         y -= 14
 
-    if spec.layout == "A":  # classic: supplier on top, "Bill To" block
+    if spec.layout in ("A", "D"):  # classic: supplier on top, "Bill To" block (D adds a per-line GST % column)
         line(spec.supplier.name, font="Helvetica-Bold", size=13, dy=16)
         line(spec.supplier.address, size=9)
         line(f"GSTIN: {spec.supplier.gstin}", size=9, dy=22)
@@ -153,15 +181,24 @@ def _draw(spec: Spec, path: Path) -> None:
         line(spec.buyer.address, size=9)
         line(f"GSTIN: {spec.buyer.gstin}", size=9)
         line(f"Place of Supply: {pos}", dy=24)
-        cols = [40, 70, 300, 370, 420, 500]
-        row(list(zip(cols, ["Sl", "Description", "HSN/SAC", "Qty", "Rate", "Amount"])), font="Helvetica-Bold")
+        multi = spec.item_rates is not None
+        cols = [40, 65, 240, 310, 350, 420, 505] if multi else [40, 70, 300, 370, 420, 500]
+        heads = ["Sl", "Description", "HSN/SAC", "Qty", "Rate", "Amount"] + (["GST%"] if multi else [])
+        row(list(zip(cols, heads)), font="Helvetica-Bold")
         for i, ((d, hsn, q, r), amt) in enumerate(zip(spec.items, amounts), 1):
-            row(list(zip(cols, [str(i), d, hsn, f"{q.normalize():f}", inr(r), inr(amt)])))
+            cells = [str(i), d, hsn, f"{q.normalize():f}", inr(r), inr(amt)]
+            if multi:
+                cells.append(f"{spec.item_rates[i - 1].normalize():f}%")
+            row(list(zip(cols, cells)))
         y -= 10
         line(f"Taxable Value   {inr(taxable)}", x=350)
-        for k, v in taxes.items():
-            rate = spec.rate_pct / (2 if k != "IGST" else 1)
-            line(f"{k} @ {rate.normalize():f}%   {inr(v)}", x=350)
+        if multi:
+            for k, comp_rate, v in _multi_rate_taxes(spec, amounts):
+                line(f"{k} @ {comp_rate.normalize():f}%   {inr(v)}", x=350)
+        else:
+            for k, v in taxes.items():
+                rate = spec.rate_pct / (2 if k != "IGST" else 1)
+                line(f"{k} @ {rate.normalize():f}%   {inr(v)}", x=350)
         line(f"Grand Total   INR {inr(total)}", x=350, font="Helvetica-Bold")
     elif spec.layout == "B":  # modern: header band, labelled parties, table w/o serial
         c.setFillColorRGB(0.12, 0.3, 0.55)
